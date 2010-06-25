@@ -9,11 +9,11 @@ using System.Windows.Forms;
 
 namespace CSharpSerialConnection
 {
-    public partial class Form1 : Form
+    public partial class UserInterface : Form
     {
         private SerialPort sPort;
 
-        public Form1()
+        public UserInterface()
         {
             InitializeComponent();
             sPort = null;
@@ -25,7 +25,7 @@ namespace CSharpSerialConnection
                 new EventHandler(
                     delegate 
                     { 
-                        textBox1.Text += sPort.ReadExisting();
+                        textBox1.Text += sPort.ReadExisting().Replace("\n", "\r\n");
                         textBox1.Select(textBox1.Text.Length, 0);
                     }));
         }
@@ -36,13 +36,14 @@ namespace CSharpSerialConnection
             {
                 try
                 {
-                    sPort = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One);
+                    sPort = new SerialPort("COM1", 38400, Parity.None, 8, StopBits.One);
                     sPort.DataReceived += new SerialDataReceivedEventHandler(RenesSerialDataReceived);
                     sPort.Open();
                 }
-                catch (System.IO.IOException)
+                catch (System.IO.IOException ex)
                 {
                     MessageBox.Show("Creation failed");
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
@@ -51,8 +52,8 @@ namespace CSharpSerialConnection
         {
             if (sPort != null)
             {
-                sPort.Write("Hallo");
-                sPort.Write("\0");
+                sPort.Write("Hi");
+                sPort.Write("\n");
             }
         }
 
