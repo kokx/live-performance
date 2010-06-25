@@ -34,6 +34,23 @@ namespace CSharpSerialConnection
             }
         }
 
+        public int Hoogte
+        {
+            get
+            {
+                return hoogte;
+            }
+        }
+
+        public MotorState Motor
+        {
+            get
+            {
+                return motor;
+            }
+        }
+
+
         public Lift(Connection connection)
         {
             this.connection = connection;
@@ -43,12 +60,14 @@ namespace CSharpSerialConnection
 
         void connection_DataReceived(object sender, ConnectionEventArgs e)
         {
-            string message = e.Message;
+            if (modus == LiftMode.USER) {
+                string message = e.Message;
 
-            if (message.StartsWith("1-")) {
-                message = message.Remove(0, 2);
+                if (message.StartsWith("1-")) {
+                    message = message.Remove(0, 2);
 
-                this.verdieping = Convert.ToInt32(message);
+                    this.verdieping = Convert.ToInt32(message);
+                }
             }
         }
 
@@ -66,12 +85,9 @@ namespace CSharpSerialConnection
         /// </summary>
         /// <param name="modus">Lift modus</param>
         /// <returns>true</returns>
-        public bool wijzigModus(LiftMode modus)
+        public void WijzigModus(LiftMode modus)
         {
-            throw new NotImplementedException();
             this.modus = modus;
-
-            return true;
         }
 
         /// <summary>
@@ -82,8 +98,12 @@ namespace CSharpSerialConnection
             // update de hoogte als we aan het verhogen/verlagen zijn
             if (hoogte > verdieping * 260) {
                 hoogte -= 2;
+                motor = MotorState.LEFT;
             } else if (hoogte < verdieping * 260) {
                 hoogte += 2;
+                motor = MotorState.RIGHT;
+            } else {
+                motor = MotorState.IDLE;
             }
 
             int[] data = new int[3];

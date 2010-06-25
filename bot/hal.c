@@ -31,7 +31,7 @@ void showStatus(uint8_t verdieping, uint16_t hoogte, uint8_t motor)
     setCursorPosLCD(1, 15);
     writeIntegerLCD(verdieping, DEC);
 
-    setLEDs(1 << verdieping);
+    setLEDs(8 >> verdieping);
 }
 
 uint8_t pressed = false;
