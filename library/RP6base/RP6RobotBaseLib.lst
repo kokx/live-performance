@@ -1,0 +1,3663 @@
+   1               		.file	"RP6RobotBaseLib.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  17               	.Ltext0:
+  18               	.global	enablePowerOnWarning
+  20               	enablePowerOnWarning:
+  21               	.LFB2:
+  22               	.LM1:
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25               	.LM2:
+  26 0000 8091 0000 		lds r24,leds_on
+  27 0004 8430      		cpi r24,lo8(4)
+  28 0006 00F0      		brlo .L3
+  29               	.LM3:
+  30 0008 1092 0000 		sts leds_on,__zero_reg__
+  31               	.L3:
+  32 000c 0895      		ret
+  33               	.LFE2:
+  35               	.global	disablePowerOnWarning
+  37               	disablePowerOnWarning:
+  38               	.LFB3:
+  39               	.LM4:
+  40               	/* prologue: function */
+  41               	/* frame size = 0 */
+  42               	.LM5:
+  43 000e 84E0      		ldi r24,lo8(4)
+  44 0010 8093 0000 		sts leds_on,r24
+  45               	/* epilogue start */
+  46               	.LM6:
+  47 0014 0895      		ret
+  48               	.LFE3:
+  50               	.global	updateStatusLEDs
+  52               	updateStatusLEDs:
+  53               	.LFB4:
+  54               	.LM7:
+  55               	/* prologue: function */
+  56               	/* frame size = 0 */
+  57               	.LM8:
+  58 0016 87B3      		in r24,55-32
+  59 0018 8C77      		andi r24,lo8(124)
+  60 001a 87BB      		out 55-32,r24
+  61               	.LM9:
+  62 001c 88B3      		in r24,56-32
+  63 001e 8C77      		andi r24,lo8(124)
+  64 0020 88BB      		out 56-32,r24
+  65               	.LM10:
+  66 0022 8091 0000 		lds r24,statusLEDs
+  67 0026 83FF      		sbrs r24,3
+  68 0028 00C0      		rjmp .L7
+  69 002a BF9A      		sbi 55-32,7
+  70 002c C79A      		sbi 56-32,7
+  71               	.L7:
+  72               	.LM11:
+  73 002e 84FF      		sbrs r24,4
+  74 0030 00C0      		rjmp .L8
+  75 0032 B99A      		sbi 55-32,1
+  76 0034 C19A      		sbi 56-32,1
+  77               	.L8:
+  78               	.LM12:
+  79 0036 85FF      		sbrs r24,5
+  80 0038 00C0      		rjmp .L9
+  81 003a B89A      		sbi 55-32,0
+  82 003c C09A      		sbi 56-32,0
+  83               	.L9:
+  84               	.LM13:
+  85 003e 84B3      		in r24,52-32
+  86 0040 8F78      		andi r24,lo8(-113)
+  87 0042 84BB      		out 52-32,r24
+  88               	.LM14:
+  89 0044 85B3      		in r24,53-32
+  90 0046 8F78      		andi r24,lo8(-113)
+  91 0048 85BB      		out 53-32,r24
+  92               	.LM15:
+  93 004a 94B3      		in r25,52-32
+  94 004c 2091 0000 		lds r18,statusLEDs
+  95 0050 822F      		mov r24,r18
+  96 0052 8295      		swap r24
+  97 0054 807F      		andi r24,0xf0
+  98 0056 8077      		andi r24,lo8(112)
+  99 0058 982B      		or r25,r24
+ 100 005a 94BB      		out 52-32,r25
+ 101               	.LM16:
+ 102 005c 95B3      		in r25,53-32
+ 103 005e 892B      		or r24,r25
+ 104 0060 85BB      		out 53-32,r24
+ 105               	.LM17:
+ 106 0062 8091 0000 		lds r24,leds_on
+ 107 0066 8823      		tst r24
+ 108 0068 01F4      		brne .L10
+ 109 006a 822F      		mov r24,r18
+ 110 006c 2111      		cpse r18,__zero_reg__
+ 111 006e 81E0      		ldi r24,lo8(1)
+ 112               	.L10:
+ 113 0070 8093 0000 		sts leds_on,r24
+ 114               	/* epilogue start */
+ 115               	.LM18:
+ 116 0074 0895      		ret
+ 117               	.LFE4:
+ 119               	.global	setLEDs
+ 121               	setLEDs:
+ 122               	.LFB5:
+ 123               	.LM19:
+ 124               	.LVL0:
+ 125               	/* prologue: function */
+ 126               	/* frame size = 0 */
+ 127               	.LM20:
+ 128 0076 8093 0000 		sts statusLEDs,r24
+ 129               	.LM21:
+ 130 007a 0E94 0000 		call updateStatusLEDs
+ 131               	.LVL1:
+ 132               	/* epilogue start */
+ 133               	.LM22:
+ 134 007e 0895      		ret
+ 135               	.LFE5:
+ 137               	.global	getBumperLeft
+ 139               	getBumperLeft:
+ 140               	.LFB6:
+ 141               	.LM23:
+ 142               	/* prologue: function */
+ 143               	/* frame size = 0 */
+ 144               	.LM24:
+ 145 0080 C098      		cbi 56-32,0
+ 146               	.LM25:
+ 147 0082 B898      		cbi 55-32,0
+ 148               	.LM26:
+ 149               	/* #APP */
+ 150               	 ;  176 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 151 0084 0000      		nop
+ 152               		
+ 153               	 ;  0 "" 2
+ 154               	.LM27:
+ 155               	/* #NOAPP */
+ 156 0086 96B3      		in r25,54-32
+ 157               	.LM28:
+ 158 0088 8091 0000 		lds r24,statusLEDs
+ 159 008c 85FF      		sbrs r24,5
+ 160 008e 00C0      		rjmp .L16
+ 161               	.LM29:
+ 162 0090 B89A      		sbi 55-32,0
+ 163               	.LM30:
+ 164 0092 C09A      		sbi 56-32,0
+ 165               	.L16:
+ 166               	.LM31:
+ 167 0094 892F      		mov r24,r25
+ 168 0096 8170      		andi r24,lo8(1)
+ 169               	/* epilogue start */
+ 170 0098 0895      		ret
+ 171               	.LFE6:
+ 173               	.global	getBumperRight
+ 175               	getBumperRight:
+ 176               	.LFB7:
+ 177               	.LM32:
+ 178               	/* prologue: function */
+ 179               	/* frame size = 0 */
+ 180               	.LM33:
+ 181 009a AE98      		cbi 53-32,6
+ 182               	.LM34:
+ 183 009c A698      		cbi 52-32,6
+ 184               	.LM35:
+ 185               	/* #APP */
+ 186               	 ;  199 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 187 009e 0000      		nop
+ 188               		
+ 189               	 ;  0 "" 2
+ 190               	.LM36:
+ 191               	/* #NOAPP */
+ 192 00a0 93B3      		in r25,51-32
+ 193               	.LM37:
+ 194 00a2 8091 0000 		lds r24,statusLEDs
+ 195 00a6 82FF      		sbrs r24,2
+ 196 00a8 00C0      		rjmp .L19
+ 197               	.LM38:
+ 198 00aa A69A      		sbi 52-32,6
+ 199               	.LM39:
+ 200 00ac AE9A      		sbi 53-32,6
+ 201               	.L19:
+ 202               	.LM40:
+ 203 00ae 892F      		mov r24,r25
+ 204 00b0 8074      		andi r24,lo8(64)
+ 205               	/* epilogue start */
+ 206 00b2 0895      		ret
+ 207               	.LFE7:
+ 209               	.global	BUMPERS_stateChanged_DUMMY
+ 211               	BUMPERS_stateChanged_DUMMY:
+ 212               	.LFB8:
+ 213               	.LM41:
+ 214               	/* prologue: function */
+ 215               	/* frame size = 0 */
+ 216               	/* epilogue start */
+ 217               	.LM42:
+ 218 00b4 0895      		ret
+ 219               	.LFE8:
+ 221               	.global	BUMPERS_setStateChangedHandler
+ 223               	BUMPERS_setStateChangedHandler:
+ 224               	.LFB9:
+ 225               	.LM43:
+ 226               	.LVL2:
+ 227               	/* prologue: function */
+ 228               	/* frame size = 0 */
+ 229               	.LM44:
+ 230 00b6 9093 0000 		sts (BUMPERS_stateChangedHandler)+1,r25
+ 231 00ba 8093 0000 		sts BUMPERS_stateChangedHandler,r24
+ 232               	/* epilogue start */
+ 233               	.LM45:
+ 234 00be 0895      		ret
+ 235               	.LFE9:
+ 237               	.global	task_Bumpers
+ 239               	task_Bumpers:
+ 240               	.LFB10:
+ 241               	.LM46:
+ 242 00c0 1F93      		push r17
+ 243               	/* prologue: function */
+ 244               	/* frame size = 0 */
+ 245               	.LM47:
+ 246 00c2 8091 0000 		lds r24,bumper_timer
+ 247 00c6 8333      		cpi r24,lo8(51)
+ 248 00c8 00F0      		brlo .L29
+ 249               	.LBB57:
+ 250               	.LM48:
+ 251 00ca 0E94 0000 		call getBumperLeft
+ 252 00ce 182F      		mov r17,r24
+ 253               	.LVL3:
+ 254               	.LM49:
+ 255 00d0 0E94 0000 		call getBumperRight
+ 256 00d4 982F      		mov r25,r24
+ 257               	.LVL4:
+ 258               	.LM50:
+ 259 00d6 8091 0000 		lds r24,bumper_left
+ 260 00da 8117      		cp r24,r17
+ 261 00dc 01F4      		brne .L27
+ 262 00de 8091 0000 		lds r24,bumper_right
+ 263 00e2 8917      		cp r24,r25
+ 264 00e4 01F0      		breq .L28
+ 265               	.L27:
+ 266               	.LM51:
+ 267 00e6 1093 0000 		sts bumper_left,r17
+ 268               	.LM52:
+ 269 00ea 9093 0000 		sts bumper_right,r25
+ 270               	.LM53:
+ 271 00ee E091 0000 		lds r30,BUMPERS_stateChangedHandler
+ 272 00f2 F091 0000 		lds r31,(BUMPERS_stateChangedHandler)+1
+ 273 00f6 0995      		icall
+ 274               	.LVL5:
+ 275               	.L28:
+ 276               	.LM54:
+ 277 00f8 1092 0000 		sts bumper_timer,__zero_reg__
+ 278               	.L29:
+ 279               	/* epilogue start */
+ 280               	.LBE57:
+ 281               	.LM55:
+ 282 00fc 1F91      		pop r17
+ 283               	.LVL6:
+ 284 00fe 0895      		ret
+ 285               	.LFE10:
+ 287               	.global	readADC
+ 289               	readADC:
+ 290               	.LFB11:
+ 291               	.LM56:
+ 292               	.LVL7:
+ 293               	/* prologue: function */
+ 294               	/* frame size = 0 */
+ 295               	.LM57:
+ 296 0100 369B      		sbis 38-32,6
+ 297 0102 00C0      		rjmp .L31
+ 298 0104 20E0      		ldi r18,lo8(0)
+ 299 0106 30E0      		ldi r19,hi8(0)
+ 300 0108 00C0      		rjmp .L32
+ 301               	.L31:
+ 302               	.LM58:
+ 303 010a 8064      		ori r24,lo8(64)
+ 304               	.LVL8:
+ 305 010c 87B9      		out 39-32,r24
+ 306               	.LM59:
+ 307 010e 86ED      		ldi r24,lo8(-42)
+ 308               	.LVL9:
+ 309 0110 86B9      		out 38-32,r24
+ 310               	.L33:
+ 311               	.LM60:
+ 312 0112 3699      		sbic 38-32,6
+ 313 0114 00C0      		rjmp .L33
+ 314               	.LM61:
+ 315 0116 349A      		sbi 38-32,4
+ 316               	.LM62:
+ 317 0118 24B1      		in r18,36-32
+ 318 011a 35B1      		in r19,(36)+1-32
+ 319               	.LVL10:
+ 320               	.L32:
+ 321               	.LM63:
+ 322 011c C901      		movw r24,r18
+ 323               	.LVL11:
+ 324               	/* epilogue start */
+ 325 011e 0895      		ret
+ 326               	.LFE11:
+ 328               	.global	startADC
+ 330               	startADC:
+ 331               	.LFB12:
+ 332               	.LM64:
+ 333               	.LVL12:
+ 334               	/* prologue: function */
+ 335               	/* frame size = 0 */
+ 336               	.LM65:
+ 337 0120 8064      		ori r24,lo8(64)
+ 338               	.LVL13:
+ 339 0122 87B9      		out 39-32,r24
+ 340               	.LM66:
+ 341 0124 86ED      		ldi r24,lo8(-42)
+ 342 0126 86B9      		out 38-32,r24
+ 343               	/* epilogue start */
+ 344               	.LM67:
+ 345 0128 0895      		ret
+ 346               	.LFE12:
+ 348               	.global	task_ADC
+ 350               	task_ADC:
+ 351               	.LFB13:
+ 352               	.LM68:
+ 353               	/* prologue: function */
+ 354               	/* frame size = 0 */
+ 355               	.LM69:
+ 356 012a 3699      		sbic 38-32,6
+ 357 012c 00C0      		rjmp .L51
+ 358               	.LM70:
+ 359 012e 2091 0000 		lds r18,current_adc_channel.1898
+ 360 0132 2330      		cpi r18,lo8(3)
+ 361 0134 01F0      		breq .L44
+ 362 0136 2430      		cpi r18,lo8(4)
+ 363 0138 00F4      		brsh .L48
+ 364 013a 2130      		cpi r18,lo8(1)
+ 365 013c 01F0      		breq .L42
+ 366 013e 2230      		cpi r18,lo8(2)
+ 367 0140 00F4      		brsh .L43
+ 368 0142 00C0      		rjmp .L54
+ 369               	.L48:
+ 370 0144 2530      		cpi r18,lo8(5)
+ 371 0146 01F0      		breq .L46
+ 372 0148 2530      		cpi r18,lo8(5)
+ 373 014a 00F0      		brlo .L45
+ 374 014c 2630      		cpi r18,lo8(6)
+ 375 014e 01F0      		breq .+2
+ 376 0150 00C0      		rjmp .L49
+ 377 0152 00C0      		rjmp .L55
+ 378               	.L54:
+ 379               	.LM71:
+ 380 0154 84B1      		in r24,36-32
+ 381 0156 95B1      		in r25,(36)+1-32
+ 382 0158 9093 0000 		sts (adcBat)+1,r25
+ 383 015c 8093 0000 		sts adcBat,r24
+ 384               	.LBB58:
+ 385               	.LBB59:
+ 386               	.LM72:
+ 387 0160 86E4      		ldi r24,lo8(70)
+ 388 0162 00C0      		rjmp .L53
+ 389               	.L42:
+ 390               	.LBE59:
+ 391               	.LBE58:
+ 392               	.LM73:
+ 393 0164 84B1      		in r24,36-32
+ 394 0166 95B1      		in r25,(36)+1-32
+ 395 0168 9093 0000 		sts (adcMotorCurrentLeft)+1,r25
+ 396 016c 8093 0000 		sts adcMotorCurrentLeft,r24
+ 397               	.LBB60:
+ 398               	.LBB61:
+ 399               	.LM74:
+ 400 0170 85E4      		ldi r24,lo8(69)
+ 401 0172 00C0      		rjmp .L53
+ 402               	.L43:
+ 403               	.LBE61:
+ 404               	.LBE60:
+ 405               	.LM75:
+ 406 0174 84B1      		in r24,36-32
+ 407 0176 95B1      		in r25,(36)+1-32
+ 408 0178 9093 0000 		sts (adcMotorCurrentRight)+1,r25
+ 409 017c 8093 0000 		sts adcMotorCurrentRight,r24
+ 410               	.LBB62:
+ 411               	.LBB63:
+ 412               	.LM76:
+ 413 0180 83E4      		ldi r24,lo8(67)
+ 414 0182 00C0      		rjmp .L53
+ 415               	.L44:
+ 416               	.LBE63:
+ 417               	.LBE62:
+ 418               	.LM77:
+ 419 0184 84B1      		in r24,36-32
+ 420 0186 95B1      		in r25,(36)+1-32
+ 421 0188 9093 0000 		sts (adcLSL)+1,r25
+ 422 018c 8093 0000 		sts adcLSL,r24
+ 423               	.LBB64:
+ 424               	.LBB65:
+ 425               	.LM78:
+ 426 0190 82E4      		ldi r24,lo8(66)
+ 427 0192 00C0      		rjmp .L53
+ 428               	.L45:
+ 429               	.LBE65:
+ 430               	.LBE64:
+ 431               	.LM79:
+ 432 0194 84B1      		in r24,36-32
+ 433 0196 95B1      		in r25,(36)+1-32
+ 434 0198 9093 0000 		sts (adcLSR)+1,r25
+ 435 019c 8093 0000 		sts adcLSR,r24
+ 436               	.LBB66:
+ 437               	.LBB67:
+ 438               	.LM80:
+ 439 01a0 80E4      		ldi r24,lo8(64)
+ 440               	.L53:
+ 441 01a2 87B9      		out 39-32,r24
+ 442               	.LM81:
+ 443 01a4 86ED      		ldi r24,lo8(-42)
+ 444 01a6 86B9      		out 38-32,r24
+ 445 01a8 00C0      		rjmp .L49
+ 446               	.L46:
+ 447               	.LBE67:
+ 448               	.LBE66:
+ 449               	.LM82:
+ 450 01aa 84B1      		in r24,36-32
+ 451 01ac 95B1      		in r25,(36)+1-32
+ 452 01ae 9093 0000 		sts (adc0)+1,r25
+ 453 01b2 8093 0000 		sts adc0,r24
+ 454               	.LBB68:
+ 455               	.LBB69:
+ 456               	.LM83:
+ 457 01b6 81E4      		ldi r24,lo8(65)
+ 458 01b8 00C0      		rjmp .L53
+ 459               	.L55:
+ 460               	.LBE69:
+ 461               	.LBE68:
+ 462               	.LM84:
+ 463 01ba 84B1      		in r24,36-32
+ 464 01bc 95B1      		in r25,(36)+1-32
+ 465 01be 9093 0000 		sts (adc1)+1,r25
+ 466 01c2 8093 0000 		sts adc1,r24
+ 467               	.LBB70:
+ 468               	.LBB71:
+ 469               	.LM85:
+ 470 01c6 87E4      		ldi r24,lo8(71)
+ 471 01c8 87B9      		out 39-32,r24
+ 472               	.LM86:
+ 473 01ca 86ED      		ldi r24,lo8(-42)
+ 474 01cc 86B9      		out 38-32,r24
+ 475               	.LBE71:
+ 476               	.LBE70:
+ 477               	.LM87:
+ 478 01ce 1092 0000 		sts current_adc_channel.1898,__zero_reg__
+ 479 01d2 0895      		ret
+ 480               	.L49:
+ 481               	.LM88:
+ 482 01d4 2F5F      		subi r18,lo8(-(1))
+ 483 01d6 2093 0000 		sts current_adc_channel.1898,r18
+ 484               	.L51:
+ 485 01da 0895      		ret
+ 486               	.LFE13:
+ 488               	.global	__vector_1
+ 490               	__vector_1:
+ 491               	.LFB14:
+ 492               	.LM89:
+ 493 01dc 1F92      		push __zero_reg__
+ 494 01de 0F92      		push r0
+ 495 01e0 0FB6      		in r0,__SREG__
+ 496 01e2 0F92      		push r0
+ 497 01e4 1124      		clr __zero_reg__
+ 498 01e6 8F93      		push r24
+ 499 01e8 9F93      		push r25
+ 500               	/* prologue: Signal */
+ 501               	/* frame size = 0 */
+ 502               	.LM90:
+ 503 01ea 8091 0000 		lds r24,mleft_dist
+ 504 01ee 9091 0000 		lds r25,(mleft_dist)+1
+ 505 01f2 0196      		adiw r24,1
+ 506 01f4 9093 0000 		sts (mleft_dist)+1,r25
+ 507 01f8 8093 0000 		sts mleft_dist,r24
+ 508               	.LM91:
+ 509 01fc 8091 0000 		lds r24,mleft_counter
+ 510 0200 9091 0000 		lds r25,(mleft_counter)+1
+ 511 0204 0196      		adiw r24,1
+ 512 0206 9093 0000 		sts (mleft_counter)+1,r25
+ 513 020a 8093 0000 		sts mleft_counter,r24
+ 514               	/* epilogue start */
+ 515               	.LM92:
+ 516 020e 9F91      		pop r25
+ 517 0210 8F91      		pop r24
+ 518 0212 0F90      		pop r0
+ 519 0214 0FBE      		out __SREG__,r0
+ 520 0216 0F90      		pop r0
+ 521 0218 1F90      		pop __zero_reg__
+ 522 021a 1895      		reti
+ 523               	.LFE14:
+ 525               	.global	__vector_2
+ 527               	__vector_2:
+ 528               	.LFB15:
+ 529               	.LM93:
+ 530 021c 1F92      		push __zero_reg__
+ 531 021e 0F92      		push r0
+ 532 0220 0FB6      		in r0,__SREG__
+ 533 0222 0F92      		push r0
+ 534 0224 1124      		clr __zero_reg__
+ 535 0226 8F93      		push r24
+ 536 0228 9F93      		push r25
+ 537               	/* prologue: Signal */
+ 538               	/* frame size = 0 */
+ 539               	.LM94:
+ 540 022a 8091 0000 		lds r24,mright_dist
+ 541 022e 9091 0000 		lds r25,(mright_dist)+1
+ 542 0232 0196      		adiw r24,1
+ 543 0234 9093 0000 		sts (mright_dist)+1,r25
+ 544 0238 8093 0000 		sts mright_dist,r24
+ 545               	.LM95:
+ 546 023c 8091 0000 		lds r24,mright_counter
+ 547 0240 9091 0000 		lds r25,(mright_counter)+1
+ 548 0244 0196      		adiw r24,1
+ 549 0246 9093 0000 		sts (mright_counter)+1,r25
+ 550 024a 8093 0000 		sts mright_counter,r24
+ 551               	/* epilogue start */
+ 552               	.LM96:
+ 553 024e 9F91      		pop r25
+ 554 0250 8F91      		pop r24
+ 555 0252 0F90      		pop r0
+ 556 0254 0FBE      		out __SREG__,r0
+ 557 0256 0F90      		pop r0
+ 558 0258 1F90      		pop __zero_reg__
+ 559 025a 1895      		reti
+ 560               	.LFE15:
+ 562               	.global	MOTIONCONTROL_stateChanged_DUMMY
+ 564               	MOTIONCONTROL_stateChanged_DUMMY:
+ 565               	.LFB16:
+ 566               	.LM97:
+ 567               	/* prologue: function */
+ 568               	/* frame size = 0 */
+ 569               	/* epilogue start */
+ 570               	.LM98:
+ 571 025c 0895      		ret
+ 572               	.LFE16:
+ 574               	.global	MOTIONCONTROL_setStateChangedHandler
+ 576               	MOTIONCONTROL_setStateChangedHandler:
+ 577               	.LFB17:
+ 578               	.LM99:
+ 579               	.LVL14:
+ 580               	/* prologue: function */
+ 581               	/* frame size = 0 */
+ 582               	.LM100:
+ 583 025e 9093 0000 		sts (MOTIONCONTROL_stateChangedHandler)+1,r25
+ 584 0262 8093 0000 		sts MOTIONCONTROL_stateChangedHandler,r24
+ 585               	/* epilogue start */
+ 586               	.LM101:
+ 587 0266 0895      		ret
+ 588               	.LFE17:
+ 590               	.global	moveAtSpeed
+ 592               	moveAtSpeed:
+ 593               	.LFB20:
+ 594               	.LM102:
+ 595               	.LVL15:
+ 596               	/* prologue: function */
+ 597               	/* frame size = 0 */
+ 598               	.LM103:
+ 599 0268 893C      		cpi r24,lo8(-55)
+ 600 026a 00F0      		brlo .L65
+ 601 026c 88EC      		ldi r24,lo8(-56)
+ 602               	.LVL16:
+ 603               	.L65:
+ 604 026e 8093 0000 		sts mleft_des_speed,r24
+ 605 0272 1092 0000 		sts mleft_des_speed+1,__zero_reg__
+ 606               	.LM104:
+ 607 0276 693C      		cpi r22,lo8(-55)
+ 608 0278 00F0      		brlo .L66
+ 609 027a 68EC      		ldi r22,lo8(-56)
+ 610               	.LVL17:
+ 611               	.L66:
+ 612 027c 6093 0000 		sts mright_des_speed,r22
+ 613 0280 1092 0000 		sts mright_des_speed+1,__zero_reg__
+ 614               	/* epilogue start */
+ 615               	.LM105:
+ 616 0284 0895      		ret
+ 617               	.LFE20:
+ 619               	.global	changeDirection
+ 621               	changeDirection:
+ 622               	.LFB21:
+ 623               	.LM106:
+ 624               	.LVL18:
+ 625               	/* prologue: function */
+ 626               	/* frame size = 0 */
+ 627 0286 282F      		mov r18,r24
+ 628               	.LM107:
+ 629 0288 8093 0000 		sts drive_dir,r24
+ 630               	.LM108:
+ 631 028c 1092 0000 		sts mleft_des_dir,__zero_reg__
+ 632 0290 8150      		subi r24,lo8(-(-1))
+ 633               	.LVL19:
+ 634 0292 8230      		cpi r24,lo8(2)
+ 635 0294 00F4      		brsh .L69
+ 636 0296 81E0      		ldi r24,lo8(1)
+ 637 0298 8093 0000 		sts mleft_des_dir,r24
+ 638               	.L69:
+ 639               	.LM109:
+ 640 029c 2130      		cpi r18,lo8(1)
+ 641 029e 01F0      		breq .L74
+ 642               	.L70:
+ 643 02a0 80E0      		ldi r24,lo8(0)
+ 644 02a2 90E0      		ldi r25,hi8(0)
+ 645 02a4 2330      		cpi r18,lo8(3)
+ 646 02a6 01F4      		brne .L71
+ 647               	.L74:
+ 648 02a8 81E0      		ldi r24,lo8(1)
+ 649 02aa 90E0      		ldi r25,hi8(1)
+ 650               	.L71:
+ 651 02ac 8093 0000 		sts mright_des_dir,r24
+ 652               	/* epilogue start */
+ 653               	.LM110:
+ 654 02b0 0895      		ret
+ 655               	.LFE21:
+ 657               	.global	isMovementComplete
+ 659               	isMovementComplete:
+ 660               	.LFB22:
+ 661               	.LM111:
+ 662               	/* prologue: function */
+ 663               	/* frame size = 0 */
+ 664               	.LM112:
+ 665 02b2 90E0      		ldi r25,lo8(0)
+ 666 02b4 8091 0000 		lds r24,motion_status
+ 667 02b8 8370      		andi r24,lo8(3)
+ 668 02ba 01F4      		brne .L76
+ 669 02bc 91E0      		ldi r25,lo8(1)
+ 670               	.L76:
+ 671               	.LM113:
+ 672 02be 892F      		mov r24,r25
+ 673               	/* epilogue start */
+ 674 02c0 0895      		ret
+ 675               	.LFE22:
+ 677               	.global	stop
+ 679               	stop:
+ 680               	.LFB23:
+ 681               	.LM114:
+ 682               	/* prologue: function */
+ 683               	/* frame size = 0 */
+ 684               	.LM115:
+ 685 02c2 1092 0000 		sts (mleft_des_speed)+1,__zero_reg__
+ 686 02c6 1092 0000 		sts mleft_des_speed,__zero_reg__
+ 687               	.LM116:
+ 688 02ca 1092 0000 		sts (mright_des_speed)+1,__zero_reg__
+ 689 02ce 1092 0000 		sts mright_des_speed,__zero_reg__
+ 690               	.LM117:
+ 691 02d2 1092 0000 		sts (left_i)+1,__zero_reg__
+ 692 02d6 1092 0000 		sts left_i,__zero_reg__
+ 693               	.LM118:
+ 694 02da 1092 0000 		sts (right_i)+1,__zero_reg__
+ 695 02de 1092 0000 		sts right_i,__zero_reg__
+ 696               	.LM119:
+ 697 02e2 8091 0000 		lds r24,motion_status
+ 698               	.LM120:
+ 699 02e6 8C7F      		andi r24,lo8(-4)
+ 700 02e8 8093 0000 		sts motion_status,r24
+ 701               	.LM121:
+ 702 02ec 8093 0000 		sts motion_status_tmp,r24
+ 703               	.LM122:
+ 704 02f0 E091 0000 		lds r30,MOTIONCONTROL_stateChangedHandler
+ 705 02f4 F091 0000 		lds r31,(MOTIONCONTROL_stateChangedHandler)+1
+ 706 02f8 0995      		icall
+ 707               	/* epilogue start */
+ 708               	.LM123:
+ 709 02fa 0895      		ret
+ 710               	.LFE23:
+ 712               	.global	setMotorPower
+ 714               	setMotorPower:
+ 715               	.LFB26:
+ 716               	.LM124:
+ 717               	.LVL20:
+ 718               	/* prologue: function */
+ 719               	/* frame size = 0 */
+ 720               	.LM125:
+ 721 02fc 633D      		cpi r22,lo8(-45)
+ 722 02fe 00F0      		brlo .L81
+ 723 0300 62ED      		ldi r22,lo8(-46)
+ 724               	.LVL21:
+ 725               	.L81:
+ 726 0302 6093 0000 		sts mright_power,r22
+ 727 0306 1092 0000 		sts mright_power+1,__zero_reg__
+ 728               	.LM126:
+ 729 030a 833D      		cpi r24,lo8(-45)
+ 730 030c 00F0      		brlo .L82
+ 731 030e 82ED      		ldi r24,lo8(-46)
+ 732               	.LVL22:
+ 733               	.L82:
+ 734 0310 8093 0000 		sts mleft_power,r24
+ 735 0314 1092 0000 		sts mleft_power+1,__zero_reg__
+ 736               	/* epilogue start */
+ 737               	.LM127:
+ 738 0318 0895      		ret
+ 739               	.LFE26:
+ 741               	.global	setMotorDir
+ 743               	setMotorDir:
+ 744               	.LFB27:
+ 745               	.LM128:
+ 746               	.LVL23:
+ 747               	/* prologue: function */
+ 748               	/* frame size = 0 */
+ 749               	.LM129:
+ 750 031a 8093 0000 		sts mleft_dir,r24
+ 751               	.LM130:
+ 752 031e 6093 0000 		sts mright_dir,r22
+ 753               	.LM131:
+ 754 0322 8093 0000 		sts mleft_des_dir,r24
+ 755               	.LM132:
+ 756 0326 6093 0000 		sts mright_des_dir,r22
+ 757               	.LM133:
+ 758 032a 8823      		tst r24
+ 759 032c 01F0      		breq .L85
+ 760               	.LM134:
+ 761 032e AA9A      		sbi 53-32,2
+ 762 0330 00C0      		rjmp .L86
+ 763               	.L85:
+ 764               	.LM135:
+ 765 0332 AA98      		cbi 53-32,2
+ 766               	.L86:
+ 767               	.LM136:
+ 768 0334 6623      		tst r22
+ 769 0336 01F0      		breq .L87
+ 770               	.LM137:
+ 771 0338 AB9A      		sbi 53-32,3
+ 772 033a 0895      		ret
+ 773               	.L87:
+ 774               	.LM138:
+ 775 033c AB98      		cbi 53-32,3
+ 776 033e 0895      		ret
+ 777               	.LFE27:
+ 779               	.global	IRCOMM_sendRC5
+ 781               	IRCOMM_sendRC5:
+ 782               	.LFB28:
+ 783               	.LM139:
+ 784               	.LVL24:
+ 785               	/* prologue: function */
+ 786               	/* frame size = 0 */
+ 787 0340 982F      		mov r25,r24
+ 788 0342 00C0      		rjmp .L91
+ 789               	.LVL25:
+ 790               	.L92:
+ 791               	.LM140:
+ 792 0344 89B7      		in r24,89-32
+ 793 0346 8068      		ori r24,lo8(-128)
+ 794 0348 89BF      		out 89-32,r24
+ 795               	.LVL26:
+ 796               	.L91:
+ 797 034a 8091 0000 		lds r24,ircomm_send
+ 798 034e 8823      		tst r24
+ 799 0350 01F4      		brne .L92
+ 800               	.LM141:
+ 801 0352 892F      		mov r24,r25
+ 802 0354 90E0      		ldi r25,lo8(0)
+ 803               	.LVL27:
+ 804 0356 8F73      		andi r24,lo8(63)
+ 805 0358 9070      		andi r25,hi8(63)
+ 806               	.LVL28:
+ 807 035a 26E0      		ldi r18,6
+ 808 035c 880F      	1:	lsl r24
+ 809 035e 991F      		rol r25
+ 810 0360 2A95      		dec r18
+ 811 0362 01F4      		brne 1b
+ 812               	.LVL29:
+ 813 0364 262F      		mov r18,r22
+ 814 0366 30E0      		ldi r19,lo8(0)
+ 815               	.LVL30:
+ 816 0368 2F73      		andi r18,lo8(63)
+ 817 036a 3070      		andi r19,hi8(63)
+ 818               	.LVL31:
+ 819 036c 822B      		or r24,r18
+ 820 036e 932B      		or r25,r19
+ 821               	.LVL32:
+ 822 0370 9063      		ori r25,hi8(12288)
+ 823               	.LVL33:
+ 824 0372 9093 0000 		sts (ircomm_data_tmp)+1,r25
+ 825 0376 8093 0000 		sts ircomm_data_tmp,r24
+ 826               	.LM142:
+ 827 037a 8091 0000 		lds r24,sysStatACS
+ 828               	.LVL34:
+ 829 037e 8064      		ori r24,lo8(64)
+ 830 0380 8093 0000 		sts sysStatACS,r24
+ 831               	/* epilogue start */
+ 832               	.LM143:
+ 833 0384 0895      		ret
+ 834               	.LFE28:
+ 836               	.global	__vector_4
+ 838               	__vector_4:
+ 839               	.LFB29:
+ 840               	.LM144:
+ 841 0386 1F92      		push __zero_reg__
+ 842 0388 0F92      		push r0
+ 843 038a 0FB6      		in r0,__SREG__
+ 844 038c 0F92      		push r0
+ 845 038e 1124      		clr __zero_reg__
+ 846 0390 2F93      		push r18
+ 847 0392 8F93      		push r24
+ 848 0394 9F93      		push r25
+ 849               	/* prologue: Signal */
+ 850               	/* frame size = 0 */
+ 851               	.LM145:
+ 852 0396 8091 0000 		lds r24,acs_state
+ 853 039a 8230      		cpi r24,lo8(2)
+ 854 039c 00F4      		brsh .L95
+ 855               	.LM146:
+ 856 039e 2091 0000 		lds r18,ircomm_pulse.2225
+ 857 03a2 2223      		tst r18
+ 858 03a4 01F0      		breq .L96
+ 859               	.LM147:
+ 860 03a6 2C33      		cpi r18,lo8(60)
+ 861 03a8 00F4      		brsh .L97
+ 862               	.LM148:
+ 863 03aa 8091 0000 		lds r24,ircomm_data
+ 864 03ae 9091 0000 		lds r25,(ircomm_data)+1
+ 865 03b2 96FF      		sbrs r25,6
+ 866 03b4 00C0      		rjmp .L107
+ 867 03b6 00C0      		rjmp .L100
+ 868               	.L97:
+ 869               	.LM149:
+ 870 03b8 8091 0000 		lds r24,ircomm_data
+ 871 03bc 9091 0000 		lds r25,(ircomm_data)+1
+ 872 03c0 96FF      		sbrs r25,6
+ 873 03c2 00C0      		rjmp .L100
+ 874               	.L107:
+ 875               	.LM150:
+ 876 03c4 9798      		cbi 50-32,7
+ 877 03c6 00C0      		rjmp .L99
+ 878               	.L100:
+ 879               	.LM151:
+ 880 03c8 82B3      		in r24,50-32
+ 881 03ca 8058      		subi r24,lo8(-(-128))
+ 882 03cc 82BB      		out 50-32,r24
+ 883               	.L99:
+ 884               	.LM152:
+ 885 03ce 2150      		subi r18,lo8(-(-1))
+ 886 03d0 2093 0000 		sts ircomm_pulse.2225,r18
+ 887 03d4 00C0      		rjmp .L106
+ 888               	.L96:
+ 889               	.LM153:
+ 890 03d6 8091 0000 		lds r24,ircomm_send
+ 891 03da 8823      		tst r24
+ 892 03dc 01F0      		breq .L102
+ 893               	.LM154:
+ 894 03de 9798      		cbi 50-32,7
+ 895               	.LM155:
+ 896 03e0 8091 0000 		lds r24,ircomm_data
+ 897 03e4 9091 0000 		lds r25,(ircomm_data)+1
+ 898 03e8 880F      		lsl r24
+ 899 03ea 991F      		rol r25
+ 900 03ec 9093 0000 		sts (ircomm_data)+1,r25
+ 901 03f0 8093 0000 		sts ircomm_data,r24
+ 902               	.LM156:
+ 903 03f4 88E7      		ldi r24,lo8(120)
+ 904 03f6 8093 0000 		sts ircomm_pulse.2225,r24
+ 905               	.LM157:
+ 906 03fa 8091 0000 		lds r24,ircomm_send
+ 907 03fe 8150      		subi r24,lo8(-(-1))
+ 908 0400 8093 0000 		sts ircomm_send,r24
+ 909 0404 00C0      		rjmp .L106
+ 910               	.L102:
+ 911               	.LM158:
+ 912 0406 9798      		cbi 50-32,7
+ 913 0408 00C0      		rjmp .L106
+ 914               	.L95:
+ 915               	.LM159:
+ 916 040a 8091 0000 		lds r24,acs_pulse
+ 917 040e 8823      		tst r24
+ 918 0410 01F0      		breq .L103
+ 919               	.LM160:
+ 920 0412 8091 0000 		lds r24,sysStatACS
+ 921 0416 80FD      		sbrc r24,0
+ 922 0418 00C0      		rjmp .L104
+ 923               	.LM161:
+ 924 041a 88B3      		in r24,56-32
+ 925 041c 90E4      		ldi r25,lo8(64)
+ 926 041e 8927      		eor r24,r25
+ 927 0420 88BB      		out 56-32,r24
+ 928 0422 00C0      		rjmp .L105
+ 929               	.L104:
+ 930               	.LM162:
+ 931 0424 85B3      		in r24,53-32
+ 932 0426 8058      		subi r24,lo8(-(-128))
+ 933 0428 85BB      		out 53-32,r24
+ 934               	.L105:
+ 935               	.LM163:
+ 936 042a 8091 0000 		lds r24,acs_pulse
+ 937 042e 8150      		subi r24,lo8(-(-1))
+ 938 0430 8093 0000 		sts acs_pulse,r24
+ 939 0434 00C0      		rjmp .L106
+ 940               	.L103:
+ 941               	.LM164:
+ 942 0436 C69A      		sbi 56-32,6
+ 943               	.LM165:
+ 944 0438 AF9A      		sbi 53-32,7
+ 945               	.L106:
+ 946               	/* epilogue start */
+ 947               	.LM166:
+ 948 043a 9F91      		pop r25
+ 949 043c 8F91      		pop r24
+ 950 043e 2F91      		pop r18
+ 951 0440 0F90      		pop r0
+ 952 0442 0FBE      		out __SREG__,r0
+ 953 0444 0F90      		pop r0
+ 954 0446 1F90      		pop __zero_reg__
+ 955 0448 1895      		reti
+ 956               	.LFE29:
+ 958               	.global	__vector_3
+ 960               	__vector_3:
+ 961               	.LFB30:
+ 962               	.LM167:
+ 963 044a 1F92      		push __zero_reg__
+ 964 044c 0F92      		push r0
+ 965 044e 0FB6      		in r0,__SREG__
+ 966 0450 0F92      		push r0
+ 967 0452 1124      		clr __zero_reg__
+ 968 0454 8F93      		push r24
+ 969               	/* prologue: Signal */
+ 970               	/* frame size = 0 */
+ 971               	.LM168:
+ 972 0456 8091 0000 		lds r24,acs_state
+ 973 045a 8330      		cpi r24,lo8(3)
+ 974 045c 01F0      		breq .L109
+ 975 045e 8630      		cpi r24,lo8(6)
+ 976 0460 01F4      		brne .L110
+ 977               	.L109:
+ 978               	.LM169:
+ 979 0462 8091 0000 		lds r24,sysStatACS
+ 980 0466 84FD      		sbrc r24,4
+ 981 0468 00C0      		rjmp .L110
+ 982 046a 85FF      		sbrs r24,5
+ 983 046c 00C0      		rjmp .L110
+ 984 046e B299      		sbic 54-32,2
+ 985 0470 00C0      		rjmp .L110
+ 986               	.LM170:
+ 987 0472 8091 0000 		lds r24,acs_event_counter
+ 988 0476 8F5F      		subi r24,lo8(-(1))
+ 989 0478 8093 0000 		sts acs_event_counter,r24
+ 990               	.L110:
+ 991               	.LM171:
+ 992 047c 86B3      		in r24,54-32
+ 993 047e 8091 0000 		lds r24,sysStatACS
+ 994 0482 8D7F      		andi r24,lo8(-3)
+ 995 0484 8093 0000 		sts sysStatACS,r24
+ 996               	/* epilogue start */
+ 997               	.LM172:
+ 998 0488 8F91      		pop r24
+ 999 048a 0F90      		pop r0
+ 1000 048c 0FBE      		out __SREG__,r0
+ 1001 048e 0F90      		pop r0
+ 1002 0490 1F90      		pop __zero_reg__
+ 1003 0492 1895      		reti
+ 1004               	.LFE30:
+ 1006               	.global	IRCOMM_RC5dataReady_DUMMY
+ 1008               	IRCOMM_RC5dataReady_DUMMY:
+ 1009               	.LFB31:
+ 1010               	.LM173:
+ 1011               	.LVL35:
+ 1012               	/* prologue: function */
+ 1013               	/* frame size = 0 */
+ 1014               	/* epilogue start */
+ 1015               	.LM174:
+ 1016 0494 0895      		ret
+ 1017               	.LFE31:
+ 1019               	.global	IRCOMM_setRC5DataReadyHandler
+ 1021               	IRCOMM_setRC5DataReadyHandler:
+ 1022               	.LFB32:
+ 1023               	.LM175:
+ 1024               	.LVL36:
+ 1025               	/* prologue: function */
+ 1026               	/* frame size = 0 */
+ 1027               	.LM176:
+ 1028 0496 9093 0000 		sts (IRCOMM_RC5dataReadyHandler)+1,r25
+ 1029 049a 8093 0000 		sts IRCOMM_RC5dataReadyHandler,r24
+ 1030               	/* epilogue start */
+ 1031               	.LM177:
+ 1032 049e 0895      		ret
+ 1033               	.LFE32:
+ 1035               	.global	ACS_stateChanged_DUMMY
+ 1037               	ACS_stateChanged_DUMMY:
+ 1038               	.LFB33:
+ 1039               	.LM178:
+ 1040               	/* prologue: function */
+ 1041               	/* frame size = 0 */
+ 1042               	/* epilogue start */
+ 1043               	.LM179:
+ 1044 04a0 0895      		ret
+ 1045               	.LFE33:
+ 1047               	.global	ACS_setStateChangedHandler
+ 1049               	ACS_setStateChangedHandler:
+ 1050               	.LFB34:
+ 1051               	.LM180:
+ 1052               	.LVL37:
+ 1053               	/* prologue: function */
+ 1054               	/* frame size = 0 */
+ 1055               	.LM181:
+ 1056 04a2 9093 0000 		sts (ACS_stateChangedHandler)+1,r25
+ 1057 04a6 8093 0000 		sts ACS_stateChangedHandler,r24
+ 1058               	/* epilogue start */
+ 1059               	.LM182:
+ 1060 04aa 0895      		ret
+ 1061               	.LFE34:
+ 1063               	.global	task_ACS
+ 1065               	task_ACS:
+ 1066               	.LFB35:
+ 1067               	.LM183:
+ 1068               	/* prologue: function */
+ 1069               	/* frame size = 0 */
+ 1070               	.LM184:
+ 1071 04ac 8091 0000 		lds r24,acs_timer
+ 1072 04b0 9091 0000 		lds r25,(acs_timer)+1
+ 1073 04b4 0297      		sbiw r24,2
+ 1074 04b6 00F4      		brsh .+2
+ 1075 04b8 00C0      		rjmp .L143
+ 1076               	.LBB72:
+ 1077               	.LM185:
+ 1078 04ba 9091 0000 		lds r25,sysStatACS
+ 1079 04be 94FD      		sbrc r25,4
+ 1080 04c0 00C0      		rjmp .L122
+ 1081               	.LM186:
+ 1082 04c2 8091 0000 		lds r24,acs_state
+ 1083 04c6 8230      		cpi r24,lo8(2)
+ 1084 04c8 01F4      		brne .+2
+ 1085 04ca 00C0      		rjmp .L126
+ 1086 04cc 8330      		cpi r24,lo8(3)
+ 1087 04ce 00F4      		brsh .L130
+ 1088 04d0 8823      		tst r24
+ 1089 04d2 01F0      		breq .L124
+ 1090 04d4 8130      		cpi r24,lo8(1)
+ 1091 04d6 01F0      		breq .+2
+ 1092 04d8 00C0      		rjmp .L123
+ 1093 04da 00C0      		rjmp .L148
+ 1094               	.L130:
+ 1095 04dc 8530      		cpi r24,lo8(5)
+ 1096 04de 01F4      		brne .+2
+ 1097 04e0 00C0      		rjmp .L128
+ 1098 04e2 8630      		cpi r24,lo8(6)
+ 1099 04e4 01F4      		brne .+2
+ 1100 04e6 00C0      		rjmp .L129
+ 1101 04e8 8330      		cpi r24,lo8(3)
+ 1102 04ea 01F0      		breq .+2
+ 1103 04ec 00C0      		rjmp .L123
+ 1104 04ee 00C0      		rjmp .L149
+ 1105               	.L124:
+ 1106               	.LM187:
+ 1107 04f0 89B7      		in r24,89-32
+ 1108 04f2 8F77      		andi r24,lo8(127)
+ 1109 04f4 89BF      		out 89-32,r24
+ 1110               	.LM188:
+ 1111 04f6 9798      		cbi 50-32,7
+ 1112               	.LM189:
+ 1113 04f8 C69A      		sbi 56-32,6
+ 1114               	.LM190:
+ 1115 04fa AF9A      		sbi 53-32,7
+ 1116 04fc 00C0      		rjmp .L123
+ 1117               	.L148:
+ 1118               	.LM191:
+ 1119 04fe 8091 0000 		lds r24,ircomm_send
+ 1120 0502 8823      		tst r24
+ 1121 0504 01F4      		brne .L131
+ 1122               	.LM192:
+ 1123 0506 96FF      		sbrs r25,6
+ 1124 0508 00C0      		rjmp .L132
+ 1125               	.LM193:
+ 1126 050a 8091 0000 		lds r24,ircomm_data_tmp
+ 1127 050e 9091 0000 		lds r25,(ircomm_data_tmp)+1
+ 1128 0512 9093 0000 		sts (ircomm_data)+1,r25
+ 1129 0516 8093 0000 		sts ircomm_data,r24
+ 1130               	.LM194:
+ 1131 051a 8EE0      		ldi r24,lo8(14)
+ 1132 051c 8093 0000 		sts ircomm_send,r24
+ 1133               	.LM195:
+ 1134 0520 8091 0000 		lds r24,sysStatACS
+ 1135 0524 8F7B      		andi r24,lo8(-65)
+ 1136 0526 8093 0000 		sts sysStatACS,r24
+ 1137               	.LM196:
+ 1138 052a 89B7      		in r24,89-32
+ 1139 052c 8068      		ori r24,lo8(-128)
+ 1140 052e 89BF      		out 89-32,r24
+ 1141 0530 00C0      		rjmp .L133
+ 1142               	.L132:
+ 1143               	.LM197:
+ 1144 0532 89B7      		in r24,89-32
+ 1145 0534 8F77      		andi r24,lo8(127)
+ 1146 0536 89BF      		out 89-32,r24
+ 1147               	.LM198:
+ 1148 0538 9798      		cbi 50-32,7
+ 1149               	.LM199:
+ 1150 053a C69A      		sbi 56-32,6
+ 1151               	.LM200:
+ 1152 053c AF9A      		sbi 53-32,7
+ 1153               	.L133:
+ 1154               	.LM201:
+ 1155 053e 8091 0000 		lds r24,acs_counter.2306
+ 1156 0542 8F5F      		subi r24,lo8(-(1))
+ 1157 0544 8093 0000 		sts acs_counter.2306,r24
+ 1158 0548 8150      		subi r24,lo8(-(-1))
+ 1159 054a 8431      		cpi r24,lo8(20)
+ 1160 054c 00F0      		brlo .L134
+ 1161               	.LM202:
+ 1162 054e 82E0      		ldi r24,lo8(2)
+ 1163 0550 8093 0000 		sts acs_state,r24
+ 1164 0554 00C0      		rjmp .L134
+ 1165               	.L131:
+ 1166               	.LM203:
+ 1167 0556 89B7      		in r24,89-32
+ 1168 0558 8068      		ori r24,lo8(-128)
+ 1169 055a 89BF      		out 89-32,r24
+ 1170               	.L134:
+ 1171               	.LM204:
+ 1172 055c 8091 0000 		lds r24,sysStatACS
+ 1173 0560 83FF      		sbrs r24,3
+ 1174 0562 00C0      		rjmp .L123
+ 1175               	.LM205:
+ 1176 0564 E091 0000 		lds r30,IRCOMM_RC5dataReadyHandler
+ 1177 0568 F091 0000 		lds r31,(IRCOMM_RC5dataReadyHandler)+1
+ 1178 056c 8091 0000 		lds r24,IRCOMM_RC5_data_ok
+ 1179 0570 9091 0000 		lds r25,(IRCOMM_RC5_data_ok)+1
+ 1180 0574 0995      		icall
+ 1181               	.LM206:
+ 1182 0576 8091 0000 		lds r24,IRCOMM_RC5_data_ok
+ 1183 057a 9091 0000 		lds r25,(IRCOMM_RC5_data_ok)+1
+ 1184 057e 9093 0000 		sts (IRCOMM_RC5_data)+1,r25
+ 1185 0582 8093 0000 		sts IRCOMM_RC5_data,r24
+ 1186               	.LM207:
+ 1187 0586 1092 0000 		sts (IRCOMM_RC5_data_ok)+1,__zero_reg__
+ 1188 058a 1092 0000 		sts IRCOMM_RC5_data_ok,__zero_reg__
+ 1189               	.LM208:
+ 1190 058e 8091 0000 		lds r24,sysStatACS
+ 1191 0592 877F      		andi r24,lo8(-9)
+ 1192 0594 8093 0000 		sts sysStatACS,r24
+ 1193 0598 00C0      		rjmp .L123
+ 1194               	.L126:
+ 1195               	.LM209:
+ 1196 059a 89B7      		in r24,89-32
+ 1197 059c 8F77      		andi r24,lo8(127)
+ 1198 059e 89BF      		out 89-32,r24
+ 1199               	.LM210:
+ 1200 05a0 9798      		cbi 50-32,7
+ 1201               	.LM211:
+ 1202 05a2 C69A      		sbi 56-32,6
+ 1203               	.LM212:
+ 1204 05a4 AF9A      		sbi 53-32,7
+ 1205               	.LM213:
+ 1206 05a6 1092 0000 		sts acs_pulse,__zero_reg__
+ 1207               	.LM214:
+ 1208 05aa 1092 0000 		sts acs_event_counter,__zero_reg__
+ 1209               	.LM215:
+ 1210 05ae 1092 0000 		sts (acs_detect_timeout.2307)+1,__zero_reg__
+ 1211 05b2 1092 0000 		sts acs_detect_timeout.2307,__zero_reg__
+ 1212               	.LM216:
+ 1213 05b6 8091 0000 		lds r24,sysStatACS
+ 1214 05ba 8E7F      		andi r24,lo8(-2)
+ 1215               	.LM217:
+ 1216 05bc 8062      		ori r24,lo8(32)
+ 1217 05be 8093 0000 		sts sysStatACS,r24
+ 1218               	.LM218:
+ 1219 05c2 83E0      		ldi r24,lo8(3)
+ 1220 05c4 8093 0000 		sts acs_counter.2306,r24
+ 1221 05c8 00C0      		rjmp .L144
+ 1222               	.L149:
+ 1223               	.LM219:
+ 1224 05ca 8091 0000 		lds r24,acs_pulse
+ 1225 05ce 8823      		tst r24
+ 1226 05d0 01F4      		brne .L135
+ 1227 05d2 8091 0000 		lds r24,acs_counter.2306
+ 1228 05d6 8F5F      		subi r24,lo8(-(1))
+ 1229 05d8 8093 0000 		sts acs_counter.2306,r24
+ 1230 05dc 8150      		subi r24,lo8(-(-1))
+ 1231 05de 8330      		cpi r24,lo8(3)
+ 1232 05e0 00F0      		brlo .L135
+ 1233               	.LM220:
+ 1234 05e2 89B7      		in r24,89-32
+ 1235 05e4 8068      		ori r24,lo8(-128)
+ 1236 05e6 89BF      		out 89-32,r24
+ 1237               	.LM221:
+ 1238 05e8 88E2      		ldi r24,lo8(40)
+ 1239 05ea 8093 0000 		sts acs_pulse,r24
+ 1240               	.LM222:
+ 1241 05ee 1092 0000 		sts acs_counter.2306,__zero_reg__
+ 1242               	.L135:
+ 1243               	.LM223:
+ 1244 05f2 8091 0000 		lds r24,obstacle_left
+ 1245 05f6 8823      		tst r24
+ 1246 05f8 01F0      		breq .L136
+ 1247 05fa 8091 0000 		lds r24,acs_event_counter
+ 1248 05fe 8230      		cpi r24,lo8(2)
+ 1249 0600 00F4      		brsh .L147
+ 1250               	.L136:
+ 1251               	.LM224:
+ 1252 0602 8091 0000 		lds r24,acs_event_counter
+ 1253 0606 8630      		cpi r24,lo8(6)
+ 1254 0608 00F0      		brlo .L137
+ 1255               	.L147:
+ 1256               	.LM225:
+ 1257 060a 1092 0000 		sts acs_event_counter,__zero_reg__
+ 1258               	.LM226:
+ 1259 060e 81E0      		ldi r24,lo8(1)
+ 1260 0610 8093 0000 		sts obstacle_left,r24
+ 1261               	.LM227:
+ 1262 0614 85E0      		ldi r24,lo8(5)
+ 1263 0616 00C0      		rjmp .L144
+ 1264               	.L137:
+ 1265               	.LM228:
+ 1266 0618 8091 0000 		lds r24,acs_detect_timeout.2307
+ 1267 061c 9091 0000 		lds r25,(acs_detect_timeout.2307)+1
+ 1268 0620 0196      		adiw r24,1
+ 1269 0622 9093 0000 		sts (acs_detect_timeout.2307)+1,r25
+ 1270 0626 8093 0000 		sts acs_detect_timeout.2307,r24
+ 1271 062a 0197      		sbiw r24,1
+ 1272 062c 0E97      		sbiw r24,14
+ 1273 062e 00F4      		brsh .+2
+ 1274 0630 00C0      		rjmp .L123
+ 1275               	.LM229:
+ 1276 0632 1092 0000 		sts obstacle_left,__zero_reg__
+ 1277               	.LM230:
+ 1278 0636 85E0      		ldi r24,lo8(5)
+ 1279 0638 00C0      		rjmp .L145
+ 1280               	.L128:
+ 1281               	.LM231:
+ 1282 063a 89B7      		in r24,89-32
+ 1283 063c 8F77      		andi r24,lo8(127)
+ 1284 063e 89BF      		out 89-32,r24
+ 1285               	.LM232:
+ 1286 0640 9798      		cbi 50-32,7
+ 1287               	.LM233:
+ 1288 0642 C69A      		sbi 56-32,6
+ 1289               	.LM234:
+ 1290 0644 AF9A      		sbi 53-32,7
+ 1291               	.LM235:
+ 1292 0646 1092 0000 		sts acs_pulse,__zero_reg__
+ 1293               	.LM236:
+ 1294 064a 1092 0000 		sts acs_event_counter,__zero_reg__
+ 1295               	.LM237:
+ 1296 064e 1092 0000 		sts (acs_detect_timeout.2307)+1,__zero_reg__
+ 1297 0652 1092 0000 		sts acs_detect_timeout.2307,__zero_reg__
+ 1298               	.LM238:
+ 1299 0656 8091 0000 		lds r24,sysStatACS
+ 1300               	.LM239:
+ 1301 065a 8162      		ori r24,lo8(33)
+ 1302 065c 8093 0000 		sts sysStatACS,r24
+ 1303               	.LM240:
+ 1304 0660 83E0      		ldi r24,lo8(3)
+ 1305 0662 8093 0000 		sts acs_counter.2306,r24
+ 1306               	.LM241:
+ 1307 0666 86E0      		ldi r24,lo8(6)
+ 1308 0668 00C0      		rjmp .L144
+ 1309               	.L129:
+ 1310               	.LM242:
+ 1311 066a 8091 0000 		lds r24,acs_pulse
+ 1312 066e 8823      		tst r24
+ 1313 0670 01F4      		brne .L138
+ 1314 0672 8091 0000 		lds r24,acs_counter.2306
+ 1315 0676 8F5F      		subi r24,lo8(-(1))
+ 1316 0678 8093 0000 		sts acs_counter.2306,r24
+ 1317 067c 8150      		subi r24,lo8(-(-1))
+ 1318 067e 8330      		cpi r24,lo8(3)
+ 1319 0680 00F0      		brlo .L138
+ 1320               	.LM243:
+ 1321 0682 89B7      		in r24,89-32
+ 1322 0684 8068      		ori r24,lo8(-128)
+ 1323 0686 89BF      		out 89-32,r24
+ 1324               	.LM244:
+ 1325 0688 88E2      		ldi r24,lo8(40)
+ 1326 068a 8093 0000 		sts acs_pulse,r24
+ 1327               	.LM245:
+ 1328 068e 1092 0000 		sts acs_counter.2306,__zero_reg__
+ 1329               	.L138:
+ 1330               	.LM246:
+ 1331 0692 8091 0000 		lds r24,obstacle_right
+ 1332 0696 8823      		tst r24
+ 1333 0698 01F0      		breq .L139
+ 1334 069a 8091 0000 		lds r24,acs_event_counter
+ 1335 069e 8230      		cpi r24,lo8(2)
+ 1336 06a0 00F4      		brsh .L146
+ 1337               	.L139:
+ 1338               	.LM247:
+ 1339 06a2 8091 0000 		lds r24,acs_event_counter
+ 1340 06a6 8630      		cpi r24,lo8(6)
+ 1341 06a8 00F0      		brlo .L140
+ 1342               	.L146:
+ 1343               	.LM248:
+ 1344 06aa 1092 0000 		sts acs_event_counter,__zero_reg__
+ 1345               	.LM249:
+ 1346 06ae 81E0      		ldi r24,lo8(1)
+ 1347 06b0 8093 0000 		sts obstacle_right,r24
+ 1348               	.L144:
+ 1349               	.LM250:
+ 1350 06b4 8093 0000 		sts acs_state,r24
+ 1351 06b8 00C0      		rjmp .L123
+ 1352               	.L140:
+ 1353               	.LM251:
+ 1354 06ba 8091 0000 		lds r24,acs_detect_timeout.2307
+ 1355 06be 9091 0000 		lds r25,(acs_detect_timeout.2307)+1
+ 1356 06c2 0196      		adiw r24,1
+ 1357 06c4 9093 0000 		sts (acs_detect_timeout.2307)+1,r25
+ 1358 06c8 8093 0000 		sts acs_detect_timeout.2307,r24
+ 1359 06cc 0197      		sbiw r24,1
+ 1360 06ce 0E97      		sbiw r24,14
+ 1361 06d0 00F0      		brlo .L123
+ 1362               	.LM252:
+ 1363 06d2 1092 0000 		sts obstacle_right,__zero_reg__
+ 1364               	.LM253:
+ 1365 06d6 81E0      		ldi r24,lo8(1)
+ 1366               	.L145:
+ 1367 06d8 8093 0000 		sts acs_state,r24
+ 1368               	.LM254:
+ 1369 06dc 89B7      		in r24,89-32
+ 1370 06de 8F77      		andi r24,lo8(127)
+ 1371 06e0 89BF      		out 89-32,r24
+ 1372               	.LM255:
+ 1373 06e2 9798      		cbi 50-32,7
+ 1374               	.LM256:
+ 1375 06e4 C69A      		sbi 56-32,6
+ 1376               	.LM257:
+ 1377 06e6 AF9A      		sbi 53-32,7
+ 1378               	.LM258:
+ 1379 06e8 1092 0000 		sts acs_pulse,__zero_reg__
+ 1380 06ec 00C0      		rjmp .L123
+ 1381               	.L122:
+ 1382               	.LM259:
+ 1383 06ee 1092 0000 		sts (acs_detect_timeout.2307)+1,__zero_reg__
+ 1384 06f2 1092 0000 		sts acs_detect_timeout.2307,__zero_reg__
+ 1385               	.LM260:
+ 1386 06f6 1092 0000 		sts acs_counter.2306,__zero_reg__
+ 1387               	.L123:
+ 1388               	.LM261:
+ 1389 06fa 2091 0000 		lds r18,obstacle_left
+ 1390 06fe 8091 0000 		lds r24,acs_l_tmp.2315
+ 1391 0702 8217      		cp r24,r18
+ 1392 0704 01F4      		brne .L141
+ 1393 0706 9091 0000 		lds r25,acs_r_tmp.2316
+ 1394 070a 8091 0000 		lds r24,obstacle_right
+ 1395 070e 9817      		cp r25,r24
+ 1396 0710 01F0      		breq .L142
+ 1397               	.L141:
+ 1398               	.LM262:
+ 1399 0712 2093 0000 		sts acs_l_tmp.2315,r18
+ 1400               	.LM263:
+ 1401 0716 8091 0000 		lds r24,obstacle_right
+ 1402 071a 8093 0000 		sts acs_r_tmp.2316,r24
+ 1403               	.LM264:
+ 1404 071e E091 0000 		lds r30,ACS_stateChangedHandler
+ 1405 0722 F091 0000 		lds r31,(ACS_stateChangedHandler)+1
+ 1406 0726 0995      		icall
+ 1407               	.L142:
+ 1408               	.LM265:
+ 1409 0728 1092 0000 		sts (acs_timer)+1,__zero_reg__
+ 1410 072c 1092 0000 		sts acs_timer,__zero_reg__
+ 1411               	.L143:
+ 1412 0730 0895      		ret
+ 1413               	.LBE72:
+ 1414               	.LFE35:
+ 1416               	.global	disableACS
+ 1418               	disableACS:
+ 1419               	.LFB36:
+ 1420               	.LM266:
+ 1421               	/* prologue: function */
+ 1422               	/* frame size = 0 */
+ 1423               	.LM267:
+ 1424 0732 1092 0000 		sts acs_state,__zero_reg__
+ 1425               	.LM268:
+ 1426 0736 89B7      		in r24,89-32
+ 1427 0738 8F77      		andi r24,lo8(127)
+ 1428 073a 89BF      		out 89-32,r24
+ 1429               	.LM269:
+ 1430 073c 9798      		cbi 50-32,7
+ 1431               	.LM270:
+ 1432 073e C69A      		sbi 56-32,6
+ 1433               	.LM271:
+ 1434 0740 AF9A      		sbi 53-32,7
+ 1435               	.LM272:
+ 1436 0742 1092 0000 		sts obstacle_right,__zero_reg__
+ 1437               	.LM273:
+ 1438 0746 1092 0000 		sts obstacle_left,__zero_reg__
+ 1439               	/* epilogue start */
+ 1440               	.LM274:
+ 1441 074a 0895      		ret
+ 1442               	.LFE36:
+ 1444               	.global	enableACS
+ 1446               	enableACS:
+ 1447               	.LFB37:
+ 1448               	.LM275:
+ 1449               	/* prologue: function */
+ 1450               	/* frame size = 0 */
+ 1451               	.LM276:
+ 1452 074c 89B7      		in r24,89-32
+ 1453 074e 8F77      		andi r24,lo8(127)
+ 1454 0750 89BF      		out 89-32,r24
+ 1455               	.LM277:
+ 1456 0752 9798      		cbi 50-32,7
+ 1457               	.LM278:
+ 1458 0754 C69A      		sbi 56-32,6
+ 1459               	.LM279:
+ 1460 0756 AF9A      		sbi 53-32,7
+ 1461               	.LM280:
+ 1462 0758 1092 0000 		sts obstacle_right,__zero_reg__
+ 1463               	.LM281:
+ 1464 075c 1092 0000 		sts obstacle_left,__zero_reg__
+ 1465               	.LM282:
+ 1466 0760 81E0      		ldi r24,lo8(1)
+ 1467 0762 8093 0000 		sts acs_state,r24
+ 1468               	/* epilogue start */
+ 1469               	.LM283:
+ 1470 0766 0895      		ret
+ 1471               	.LFE37:
+ 1473               	.global	setACSPwrOff
+ 1475               	setACSPwrOff:
+ 1476               	.LFB38:
+ 1477               	.LM284:
+ 1478               	/* prologue: function */
+ 1479               	/* frame size = 0 */
+ 1480               	.LM285:
+ 1481 0768 8E98      		cbi 49-32,6
+ 1482               	.LM286:
+ 1483 076a 9698      		cbi 50-32,6
+ 1484               	.LM287:
+ 1485 076c BB98      		cbi 55-32,3
+ 1486               	.LM288:
+ 1487 076e C398      		cbi 56-32,3
+ 1488               	.LM289:
+ 1489 0770 C698      		cbi 56-32,6
+ 1490               	.LM290:
+ 1491 0772 AF98      		cbi 53-32,7
+ 1492               	/* epilogue start */
+ 1493               	.LM291:
+ 1494 0774 0895      		ret
+ 1495               	.LFE38:
+ 1497               	.global	setACSPwrLow
+ 1499               	setACSPwrLow:
+ 1500               	.LFB39:
+ 1501               	.LM292:
+ 1502               	/* prologue: function */
+ 1503               	/* frame size = 0 */
+ 1504               	.LM293:
+ 1505 0776 8E9A      		sbi 49-32,6
+ 1506               	.LM294:
+ 1507 0778 969A      		sbi 50-32,6
+ 1508               	.LM295:
+ 1509 077a BB98      		cbi 55-32,3
+ 1510               	.LM296:
+ 1511 077c C398      		cbi 56-32,3
+ 1512               	/* epilogue start */
+ 1513               	.LM297:
+ 1514 077e 0895      		ret
+ 1515               	.LFE39:
+ 1517               	.global	setACSPwrMed
+ 1519               	setACSPwrMed:
+ 1520               	.LFB40:
+ 1521               	.LM298:
+ 1522               	/* prologue: function */
+ 1523               	/* frame size = 0 */
+ 1524               	.LM299:
+ 1525 0780 8E98      		cbi 49-32,6
+ 1526               	.LM300:
+ 1527 0782 9698      		cbi 50-32,6
+ 1528               	.LM301:
+ 1529 0784 BB9A      		sbi 55-32,3
+ 1530               	.LM302:
+ 1531 0786 C39A      		sbi 56-32,3
+ 1532               	/* epilogue start */
+ 1533               	.LM303:
+ 1534 0788 0895      		ret
+ 1535               	.LFE40:
+ 1537               	.global	setACSPwrHigh
+ 1539               	setACSPwrHigh:
+ 1540               	.LFB41:
+ 1541               	.LM304:
+ 1542               	/* prologue: function */
+ 1543               	/* frame size = 0 */
+ 1544               	.LM305:
+ 1545 078a 8E9A      		sbi 49-32,6
+ 1546               	.LM306:
+ 1547 078c 969A      		sbi 50-32,6
+ 1548               	.LM307:
+ 1549 078e BB9A      		sbi 55-32,3
+ 1550               	.LM308:
+ 1551 0790 C39A      		sbi 56-32,3
+ 1552               	/* epilogue start */
+ 1553               	.LM309:
+ 1554 0792 0895      		ret
+ 1555               	.LFE41:
+ 1557               	.global	powerON
+ 1559               	powerON:
+ 1560               	.LFB42:
+ 1561               	.LM310:
+ 1562               	/* prologue: function */
+ 1563               	/* frame size = 0 */
+ 1564               	.LM311:
+ 1565 0794 C49A      		sbi 56-32,4
+ 1566               	.LM312:
+ 1567 0796 8091 0000 		lds r24,leds_on
+ 1568 079a 8430      		cpi r24,lo8(4)
+ 1569 079c 00F4      		brsh .L164
+ 1570               	.LM313:
+ 1571 079e 83E0      		ldi r24,lo8(3)
+ 1572 07a0 8093 0000 		sts leds_on,r24
+ 1573               	.L164:
+ 1574 07a4 0895      		ret
+ 1575               	.LFE42:
+ 1577               	.global	powerOFF
+ 1579               	powerOFF:
+ 1580               	.LFB43:
+ 1581               	.LM314:
+ 1582               	/* prologue: function */
+ 1583               	/* frame size = 0 */
+ 1584               	.LM315:
+ 1585 07a6 C498      		cbi 56-32,4
+ 1586               	.LM316:
+ 1587 07a8 8091 0000 		lds r24,leds_on
+ 1588 07ac 8430      		cpi r24,lo8(4)
+ 1589 07ae 00F4      		brsh .L170
+ 1590               	.LM317:
+ 1591 07b0 8823      		tst r24
+ 1592 07b2 01F4      		brne .L171
+ 1593               	.L167:
+ 1594 07b4 20E0      		ldi r18,lo8(0)
+ 1595 07b6 30E0      		ldi r19,hi8(0)
+ 1596 07b8 8091 0000 		lds r24,statusLEDs
+ 1597 07bc 8823      		tst r24
+ 1598 07be 01F0      		breq .L168
+ 1599               	.L171:
+ 1600 07c0 21E0      		ldi r18,lo8(1)
+ 1601 07c2 30E0      		ldi r19,hi8(1)
+ 1602               	.L168:
+ 1603 07c4 2093 0000 		sts leds_on,r18
+ 1604               	.L170:
+ 1605 07c8 0895      		ret
+ 1606               	.LFE43:
+ 1608               	.global	__vector_10
+ 1610               	__vector_10:
+ 1611               	.LFB44:
+ 1612               	.LM318:
+ 1613 07ca 1F92      		push __zero_reg__
+ 1614 07cc 0F92      		push r0
+ 1615 07ce 0FB6      		in r0,__SREG__
+ 1616 07d0 0F92      		push r0
+ 1617 07d2 1124      		clr __zero_reg__
+ 1618 07d4 2F93      		push r18
+ 1619 07d6 3F93      		push r19
+ 1620 07d8 4F93      		push r20
+ 1621 07da 5F93      		push r21
+ 1622 07dc 6F93      		push r22
+ 1623 07de 7F93      		push r23
+ 1624 07e0 8F93      		push r24
+ 1625 07e2 9F93      		push r25
+ 1626 07e4 AF93      		push r26
+ 1627 07e6 BF93      		push r27
+ 1628               	/* prologue: Signal */
+ 1629               	/* frame size = 0 */
+ 1630               	.LM319:
+ 1631 07e8 8091 0000 		lds r24,timer
+ 1632 07ec 9091 0000 		lds r25,(timer)+1
+ 1633 07f0 0196      		adiw r24,1
+ 1634 07f2 9093 0000 		sts (timer)+1,r25
+ 1635 07f6 8093 0000 		sts timer,r24
+ 1636               	.LM320:
+ 1637 07fa 8091 0000 		lds r24,delay_timer
+ 1638 07fe 8F5F      		subi r24,lo8(-(1))
+ 1639 0800 8093 0000 		sts delay_timer,r24
+ 1640               	.LM321:
+ 1641 0804 8091 0000 		lds r24,ms_timer
+ 1642 0808 8F5F      		subi r24,lo8(-(1))
+ 1643 080a 8093 0000 		sts ms_timer,r24
+ 1644 080e 8150      		subi r24,lo8(-(-1))
+ 1645 0810 8A30      		cpi r24,lo8(10)
+ 1646 0812 00F4      		brsh .+2
+ 1647 0814 00C0      		rjmp .L173
+ 1648               	.LM322:
+ 1649 0816 8091 0000 		lds r24,stopwatches
+ 1650 081a 80FF      		sbrs r24,0
+ 1651 081c 00C0      		rjmp .L174
+ 1652               	.LM323:
+ 1653 081e 8091 0000 		lds r24,stopwatches+1
+ 1654 0822 9091 0000 		lds r25,(stopwatches+1)+1
+ 1655 0826 0196      		adiw r24,1
+ 1656 0828 9093 0000 		sts (stopwatches+1)+1,r25
+ 1657 082c 8093 0000 		sts stopwatches+1,r24
+ 1658               	.L174:
+ 1659               	.LM324:
+ 1660 0830 8091 0000 		lds r24,stopwatches
+ 1661 0834 81FF      		sbrs r24,1
+ 1662 0836 00C0      		rjmp .L175
+ 1663               	.LM325:
+ 1664 0838 8091 0000 		lds r24,stopwatches+3
+ 1665 083c 9091 0000 		lds r25,(stopwatches+3)+1
+ 1666 0840 0196      		adiw r24,1
+ 1667 0842 9093 0000 		sts (stopwatches+3)+1,r25
+ 1668 0846 8093 0000 		sts stopwatches+3,r24
+ 1669               	.L175:
+ 1670               	.LM326:
+ 1671 084a 8091 0000 		lds r24,stopwatches
+ 1672 084e 82FF      		sbrs r24,2
+ 1673 0850 00C0      		rjmp .L176
+ 1674               	.LM327:
+ 1675 0852 8091 0000 		lds r24,stopwatches+5
+ 1676 0856 9091 0000 		lds r25,(stopwatches+5)+1
+ 1677 085a 0196      		adiw r24,1
+ 1678 085c 9093 0000 		sts (stopwatches+5)+1,r25
+ 1679 0860 8093 0000 		sts stopwatches+5,r24
+ 1680               	.L176:
+ 1681               	.LM328:
+ 1682 0864 8091 0000 		lds r24,stopwatches
+ 1683 0868 83FF      		sbrs r24,3
+ 1684 086a 00C0      		rjmp .L177
+ 1685               	.LM329:
+ 1686 086c 8091 0000 		lds r24,stopwatches+7
+ 1687 0870 9091 0000 		lds r25,(stopwatches+7)+1
+ 1688 0874 0196      		adiw r24,1
+ 1689 0876 9093 0000 		sts (stopwatches+7)+1,r25
+ 1690 087a 8093 0000 		sts stopwatches+7,r24
+ 1691               	.L177:
+ 1692               	.LM330:
+ 1693 087e 8091 0000 		lds r24,stopwatches
+ 1694 0882 84FF      		sbrs r24,4
+ 1695 0884 00C0      		rjmp .L178
+ 1696               	.LM331:
+ 1697 0886 8091 0000 		lds r24,stopwatches+9
+ 1698 088a 9091 0000 		lds r25,(stopwatches+9)+1
+ 1699 088e 0196      		adiw r24,1
+ 1700 0890 9093 0000 		sts (stopwatches+9)+1,r25
+ 1701 0894 8093 0000 		sts stopwatches+9,r24
+ 1702               	.L178:
+ 1703               	.LM332:
+ 1704 0898 8091 0000 		lds r24,stopwatches
+ 1705 089c 85FF      		sbrs r24,5
+ 1706 089e 00C0      		rjmp .L179
+ 1707               	.LM333:
+ 1708 08a0 8091 0000 		lds r24,stopwatches+11
+ 1709 08a4 9091 0000 		lds r25,(stopwatches+11)+1
+ 1710 08a8 0196      		adiw r24,1
+ 1711 08aa 9093 0000 		sts (stopwatches+11)+1,r25
+ 1712 08ae 8093 0000 		sts stopwatches+11,r24
+ 1713               	.L179:
+ 1714               	.LM334:
+ 1715 08b2 8091 0000 		lds r24,stopwatches
+ 1716 08b6 86FF      		sbrs r24,6
+ 1717 08b8 00C0      		rjmp .L180
+ 1718               	.LM335:
+ 1719 08ba 8091 0000 		lds r24,stopwatches+13
+ 1720 08be 9091 0000 		lds r25,(stopwatches+13)+1
+ 1721 08c2 0196      		adiw r24,1
+ 1722 08c4 9093 0000 		sts (stopwatches+13)+1,r25
+ 1723 08c8 8093 0000 		sts stopwatches+13,r24
+ 1724               	.L180:
+ 1725               	.LM336:
+ 1726 08cc 8091 0000 		lds r24,stopwatches
+ 1727 08d0 87FF      		sbrs r24,7
+ 1728 08d2 00C0      		rjmp .L181
+ 1729               	.LM337:
+ 1730 08d4 8091 0000 		lds r24,stopwatches+15
+ 1731 08d8 9091 0000 		lds r25,(stopwatches+15)+1
+ 1732 08dc 0196      		adiw r24,1
+ 1733 08de 9093 0000 		sts (stopwatches+15)+1,r25
+ 1734 08e2 8093 0000 		sts stopwatches+15,r24
+ 1735               	.L181:
+ 1736               	.LM338:
+ 1737 08e6 8091 0000 		lds r24,speed_timer
+ 1738 08ea 8F5F      		subi r24,lo8(-(1))
+ 1739 08ec 8093 0000 		sts speed_timer,r24
+ 1740 08f0 8150      		subi r24,lo8(-(-1))
+ 1741 08f2 893C      		cpi r24,lo8(-55)
+ 1742 08f4 00F0      		brlo .L182
+ 1743               	.LM339:
+ 1744 08f6 8091 0000 		lds r24,mright_counter
+ 1745 08fa 9091 0000 		lds r25,(mright_counter)+1
+ 1746 08fe 9093 0000 		sts (mright_speed)+1,r25
+ 1747 0902 8093 0000 		sts mright_speed,r24
+ 1748               	.LM340:
+ 1749 0906 8091 0000 		lds r24,mleft_counter
+ 1750 090a 9091 0000 		lds r25,(mleft_counter)+1
+ 1751 090e 9093 0000 		sts (mleft_speed)+1,r25
+ 1752 0912 8093 0000 		sts mleft_speed,r24
+ 1753               	.LM341:
+ 1754 0916 1092 0000 		sts (mright_counter)+1,__zero_reg__
+ 1755 091a 1092 0000 		sts mright_counter,__zero_reg__
+ 1756               	.LM342:
+ 1757 091e 1092 0000 		sts (mleft_counter)+1,__zero_reg__
+ 1758 0922 1092 0000 		sts mleft_counter,__zero_reg__
+ 1759               	.LM343:
+ 1760 0926 81E0      		ldi r24,lo8(1)
+ 1761 0928 8093 0000 		sts motor_control,r24
+ 1762               	.LM344:
+ 1763 092c 1092 0000 		sts speed_timer,__zero_reg__
+ 1764               	.L182:
+ 1765               	.LM345:
+ 1766 0930 4091 0000 		lds r20,leds_on
+ 1767 0934 4330      		cpi r20,lo8(3)
+ 1768 0936 00F0      		brlo .+2
+ 1769 0938 00C0      		rjmp .L183
+ 1770               	.LM346:
+ 1771 093a 4230      		cpi r20,lo8(2)
+ 1772 093c 01F4      		brne .L184
+ 1773               	.LM347:
+ 1774 093e 8091 0000 		lds r24,statusLEDs
+ 1775 0942 8823      		tst r24
+ 1776 0944 01F4      		brne .L185
+ 1777               	.LM348:
+ 1778 0946 8091 0000 		lds r24,leds_on_timer.2541
+ 1779 094a 9091 0000 		lds r25,(leds_on_timer.2541)+1
+ 1780 094e 9C01      		movw r18,r24
+ 1781 0950 2F5F      		subi r18,lo8(-(1))
+ 1782 0952 3F4F      		sbci r19,hi8(-(1))
+ 1783 0954 3093 0000 		sts (leds_on_timer.2541)+1,r19
+ 1784 0958 2093 0000 		sts leds_on_timer.2541,r18
+ 1785 095c 68EC      		ldi r22,lo8(200)
+ 1786 095e 70E0      		ldi r23,hi8(200)
+ 1787 0960 0E94 0000 		call __udivmodhi4
+ 1788 0964 892B      		or r24,r25
+ 1789 0966 01F4      		brne .L183
+ 1790               	.LM349:
+ 1791 0968 215A      		subi r18,lo8(4001)
+ 1792 096a 3F40      		sbci r19,hi8(4001)
+ 1793 096c 00F0      		brlo .L186
+ 1794               	.LM350:
+ 1795 096e B998      		cbi 55-32,1
+ 1796               	.LM351:
+ 1797 0970 C198      		cbi 56-32,1
+ 1798               	.LM352:
+ 1799 0972 1092 0000 		sts leds_on,__zero_reg__
+ 1800 0976 00C0      		rjmp .L190
+ 1801               	.L186:
+ 1802               	.LM353:
+ 1803 0978 87B3      		in r24,55-32
+ 1804 097a 8427      		eor r24,r20
+ 1805 097c 87BB      		out 55-32,r24
+ 1806               	.LM354:
+ 1807 097e 88B3      		in r24,56-32
+ 1808 0980 8427      		eor r24,r20
+ 1809 0982 88BB      		out 56-32,r24
+ 1810 0984 00C0      		rjmp .L183
+ 1811               	.L185:
+ 1812               	.LM355:
+ 1813 0986 84FD      		sbrc r24,4
+ 1814 0988 00C0      		rjmp .L187
+ 1815               	.LM356:
+ 1816 098a B998      		cbi 55-32,1
+ 1817               	.LM357:
+ 1818 098c C198      		cbi 56-32,1
+ 1819               	.L187:
+ 1820               	.LM358:
+ 1821 098e 1092 0000 		sts (leds_on_timer.2541)+1,__zero_reg__
+ 1822 0992 1092 0000 		sts leds_on_timer.2541,__zero_reg__
+ 1823               	.LM359:
+ 1824 0996 81E0      		ldi r24,lo8(1)
+ 1825 0998 8093 0000 		sts leds_on,r24
+ 1826 099c 00C0      		rjmp .L183
+ 1827               	.L184:
+ 1828               	.LM360:
+ 1829 099e 8091 0000 		lds r24,leds_on_timer.2541
+ 1830 09a2 9091 0000 		lds r25,(leds_on_timer.2541)+1
+ 1831 09a6 2EE2      		ldi r18,hi8(12001)
+ 1832 09a8 813E      		cpi r24,lo8(12001)
+ 1833 09aa 9207      		cpc r25,r18
+ 1834 09ac 00F0      		brlo .L188
+ 1835               	.LM361:
+ 1836 09ae 4130      		cpi r20,lo8(1)
+ 1837 09b0 01F4      		brne .L189
+ 1838               	.LM362:
+ 1839 09b2 1092 0000 		sts leds_on,__zero_reg__
+ 1840               	.LM363:
+ 1841 09b6 8091 0000 		lds r24,statusLEDs
+ 1842 09ba 84FD      		sbrc r24,4
+ 1843 09bc 00C0      		rjmp .L190
+ 1844               	.LM364:
+ 1845 09be B998      		cbi 55-32,1
+ 1846               	.LM365:
+ 1847 09c0 C198      		cbi 56-32,1
+ 1848 09c2 00C0      		rjmp .L190
+ 1849               	.L189:
+ 1850               	.LM366:
+ 1851 09c4 82E0      		ldi r24,lo8(2)
+ 1852 09c6 8093 0000 		sts leds_on,r24
+ 1853               	.L190:
+ 1854               	.LM367:
+ 1855 09ca 1092 0000 		sts (leds_on_timer.2541)+1,__zero_reg__
+ 1856 09ce 1092 0000 		sts leds_on_timer.2541,__zero_reg__
+ 1857 09d2 00C0      		rjmp .L183
+ 1858               	.L188:
+ 1859               	.LM368:
+ 1860 09d4 0196      		adiw r24,1
+ 1861 09d6 9093 0000 		sts (leds_on_timer.2541)+1,r25
+ 1862 09da 8093 0000 		sts leds_on_timer.2541,r24
+ 1863               	.L183:
+ 1864               	.LM369:
+ 1865 09de 8091 0000 		lds r24,acs_timer
+ 1866 09e2 9091 0000 		lds r25,(acs_timer)+1
+ 1867 09e6 0397      		sbiw r24,3
+ 1868 09e8 00F4      		brsh .L191
+ 1869               	.LM370:
+ 1870 09ea 8091 0000 		lds r24,acs_timer
+ 1871 09ee 9091 0000 		lds r25,(acs_timer)+1
+ 1872 09f2 0196      		adiw r24,1
+ 1873 09f4 9093 0000 		sts (acs_timer)+1,r25
+ 1874 09f8 8093 0000 		sts acs_timer,r24
+ 1875               	.L191:
+ 1876               	.LM371:
+ 1877 09fc 8091 0000 		lds r24,overcurrent_timer
+ 1878 0a00 8733      		cpi r24,lo8(55)
+ 1879 0a02 00F4      		brsh .L192
+ 1880               	.LM372:
+ 1881 0a04 8F5F      		subi r24,lo8(-(1))
+ 1882 0a06 8093 0000 		sts overcurrent_timer,r24
+ 1883               	.L192:
+ 1884               	.LM373:
+ 1885 0a0a 8091 0000 		lds r24,bumper_timer
+ 1886 0a0e 8433      		cpi r24,lo8(52)
+ 1887 0a10 00F4      		brsh .L193
+ 1888               	.LM374:
+ 1889 0a12 8091 0000 		lds r24,bumper_timer
+ 1890 0a16 8F5F      		subi r24,lo8(-(1))
+ 1891 0a18 8093 0000 		sts bumper_timer,r24
+ 1892               	.L193:
+ 1893               	.LM375:
+ 1894 0a1c 8091 0000 		lds r24,speed_adjust_timer
+ 1895 0a20 8F5F      		subi r24,lo8(-(1))
+ 1896 0a22 8093 0000 		sts speed_adjust_timer,r24
+ 1897 0a26 8150      		subi r24,lo8(-(-1))
+ 1898 0a28 8330      		cpi r24,lo8(3)
+ 1899 0a2a 00F0      		brlo .L194
+ 1900               	.LM376:
+ 1901 0a2c 8091 0000 		lds r24,mright_ptmp
+ 1902 0a30 482F      		mov r20,r24
+ 1903 0a32 50E0      		ldi r21,lo8(0)
+ 1904 0a34 2091 0000 		lds r18,mright_power
+ 1905 0a38 3091 0000 		lds r19,(mright_power)+1
+ 1906 0a3c 4217      		cp r20,r18
+ 1907 0a3e 5307      		cpc r21,r19
+ 1908 0a40 01F0      		breq .L195
+ 1909               	.LM377:
+ 1910 0a42 4217      		cp r20,r18
+ 1911 0a44 5307      		cpc r21,r19
+ 1912 0a46 04F4      		brge .L196
+ 1913               	.LM378:
+ 1914 0a48 8F5F      		subi r24,lo8(-(1))
+ 1915 0a4a 00C0      		rjmp .L213
+ 1916               	.L196:
+ 1917               	.LM379:
+ 1918 0a4c 8150      		subi r24,lo8(-(-1))
+ 1919               	.L213:
+ 1920 0a4e 8093 0000 		sts mright_ptmp,r24
+ 1921               	.LM380:
+ 1922 0a52 8091 0000 		lds r24,mright_ptmp
+ 1923 0a56 8ABD      		out 74-32,r24
+ 1924               	.L195:
+ 1925               	.LM381:
+ 1926 0a58 8091 0000 		lds r24,mleft_ptmp
+ 1927 0a5c 482F      		mov r20,r24
+ 1928 0a5e 50E0      		ldi r21,lo8(0)
+ 1929 0a60 2091 0000 		lds r18,mleft_power
+ 1930 0a64 3091 0000 		lds r19,(mleft_power)+1
+ 1931 0a68 4217      		cp r20,r18
+ 1932 0a6a 5307      		cpc r21,r19
+ 1933 0a6c 01F0      		breq .L198
+ 1934               	.LM382:
+ 1935 0a6e 4217      		cp r20,r18
+ 1936 0a70 5307      		cpc r21,r19
+ 1937 0a72 04F4      		brge .L199
+ 1938               	.LM383:
+ 1939 0a74 8F5F      		subi r24,lo8(-(1))
+ 1940 0a76 00C0      		rjmp .L214
+ 1941               	.L199:
+ 1942               	.LM384:
+ 1943 0a78 8150      		subi r24,lo8(-(-1))
+ 1944               	.L214:
+ 1945 0a7a 8093 0000 		sts mleft_ptmp,r24
+ 1946               	.LM385:
+ 1947 0a7e 8091 0000 		lds r24,mleft_ptmp
+ 1948 0a82 88BD      		out 72-32,r24
+ 1949               	.L198:
+ 1950               	.LM386:
+ 1951 0a84 8091 0000 		lds r24,mleft_ptmp
+ 1952 0a88 8823      		tst r24
+ 1953 0a8a 01F4      		brne .L201
+ 1954 0a8c 8091 0000 		lds r24,mright_ptmp
+ 1955 0a90 8823      		tst r24
+ 1956 0a92 01F0      		breq .L202
+ 1957               	.L201:
+ 1958               	.LM387:
+ 1959 0a94 82EA      		ldi r24,lo8(-94)
+ 1960 0a96 8FBD      		out 79-32,r24
+ 1961 0a98 00C0      		rjmp .L203
+ 1962               	.L202:
+ 1963               	.LM388:
+ 1964 0a9a 1FBC      		out 79-32,__zero_reg__
+ 1965               	.L203:
+ 1966               	.LM389:
+ 1967 0a9c 1092 0000 		sts speed_adjust_timer,__zero_reg__
+ 1968               	.L194:
+ 1969               	.LM390:
+ 1970 0aa0 1092 0000 		sts ms_timer,__zero_reg__
+ 1971               	.L173:
+ 1972               	.LM391:
+ 1973 0aa4 8091 0000 		lds r24,sysStatACS
+ 1974 0aa8 83FD      		sbrc r24,3
+ 1975 0aaa 00C0      		rjmp .L212
+ 1976               	.LBB73:
+ 1977               	.LM392:
+ 1978 0aac 2091 0000 		lds r18,IRCOMM_RC5_tmp.2544
+ 1979 0ab0 3091 0000 		lds r19,(IRCOMM_RC5_tmp.2544)+1
+ 1980               	.LVL38:
+ 1981               	.LM393:
+ 1982 0ab4 4091 0000 		lds r20,IRCOMM_RC5_time.2543
+ 1983 0ab8 4F5F      		subi r20,lo8(-(1))
+ 1984 0aba 4093 0000 		sts IRCOMM_RC5_time.2543,r20
+ 1985 0abe 4631      		cpi r20,lo8(22)
+ 1986 0ac0 00F0      		brlo .L205
+ 1987               	.LM394:
+ 1988 0ac2 36FD      		sbrc r19,6
+ 1989 0ac4 00C0      		rjmp .L206
+ 1990 0ac6 35FF      		sbrs r19,5
+ 1991 0ac8 00C0      		rjmp .L206
+ 1992               	.LM395:
+ 1993 0aca 3093 0000 		sts (IRCOMM_RC5_data_ok)+1,r19
+ 1994 0ace 2093 0000 		sts IRCOMM_RC5_data_ok,r18
+ 1995               	.LM396:
+ 1996 0ad2 8860      		ori r24,lo8(8)
+ 1997 0ad4 8093 0000 		sts sysStatACS,r24
+ 1998               	.L206:
+ 1999               	.LM397:
+ 2000 0ad8 8091 0000 		lds r24,sysStatACS
+ 2001 0adc 8F7E      		andi r24,lo8(-17)
+ 2002 0ade 8093 0000 		sts sysStatACS,r24
+ 2003 0ae2 20E0      		ldi r18,lo8(0)
+ 2004 0ae4 30E0      		ldi r19,hi8(0)
+ 2005               	.L205:
+ 2006               	.LM398:
+ 2007 0ae6 9091 0000 		lds r25,IRCOMM_RC5_bit.2542
+ 2008 0aea 86B3      		in r24,54-32
+ 2009 0aec 8927      		eor r24,r25
+ 2010 0aee 82FF      		sbrs r24,2
+ 2011 0af0 00C0      		rjmp .L207
+ 2012               	.LM399:
+ 2013 0af2 9095      		com r25
+ 2014 0af4 9093 0000 		sts IRCOMM_RC5_bit.2542,r25
+ 2015               	.LM400:
+ 2016 0af8 4730      		cpi r20,lo8(7)
+ 2017 0afa 00F4      		brsh .L208
+ 2018               	.LM401:
+ 2019 0afc 8091 0000 		lds r24,sysStatACS
+ 2020 0b00 8F7E      		andi r24,lo8(-17)
+ 2021 0b02 8093 0000 		sts sysStatACS,r24
+ 2022 0b06 20E0      		ldi r18,lo8(0)
+ 2023 0b08 30E0      		ldi r19,hi8(0)
+ 2024 0b0a 00C0      		rjmp .L209
+ 2025               	.L208:
+ 2026               	.LM402:
+ 2027 0b0c 2115      		cp r18,__zero_reg__
+ 2028 0b0e 3105      		cpc r19,__zero_reg__
+ 2029 0b10 01F0      		breq .L209
+ 2030 0b12 4F30      		cpi r20,lo8(15)
+ 2031 0b14 00F0      		brlo .L207
+ 2032               	.L209:
+ 2033               	.LM403:
+ 2034 0b16 8091 0000 		lds r24,sysStatACS
+ 2035 0b1a 8061      		ori r24,lo8(16)
+ 2036 0b1c 8093 0000 		sts sysStatACS,r24
+ 2037               	.LM404:
+ 2038 0b20 36FD      		sbrc r19,6
+ 2039 0b22 00C0      		rjmp .L210
+ 2040               	.LM405:
+ 2041 0b24 220F      		lsl r18
+ 2042 0b26 331F      		rol r19
+ 2043               	.L210:
+ 2044               	.LM406:
+ 2045 0b28 92FF      		sbrs r25,2
+ 2046               	.LM407:
+ 2047 0b2a 2160      		ori r18,lo8(1)
+ 2048               	.L211:
+ 2049               	.LM408:
+ 2050 0b2c 1092 0000 		sts IRCOMM_RC5_time.2543,__zero_reg__
+ 2051               	.L207:
+ 2052               	.LM409:
+ 2053 0b30 3093 0000 		sts (IRCOMM_RC5_tmp.2544)+1,r19
+ 2054 0b34 2093 0000 		sts IRCOMM_RC5_tmp.2544,r18
+ 2055               	.L212:
+ 2056               	/* epilogue start */
+ 2057               	.LBE73:
+ 2058               	.LM410:
+ 2059 0b38 BF91      		pop r27
+ 2060 0b3a AF91      		pop r26
+ 2061 0b3c 9F91      		pop r25
+ 2062 0b3e 8F91      		pop r24
+ 2063 0b40 7F91      		pop r23
+ 2064 0b42 6F91      		pop r22
+ 2065 0b44 5F91      		pop r21
+ 2066 0b46 4F91      		pop r20
+ 2067 0b48 3F91      		pop r19
+ 2068 0b4a 2F91      		pop r18
+ 2069               	.LVL39:
+ 2070 0b4c 0F90      		pop r0
+ 2071 0b4e 0FBE      		out __SREG__,r0
+ 2072 0b50 0F90      		pop r0
+ 2073 0b52 1F90      		pop __zero_reg__
+ 2074 0b54 1895      		reti
+ 2075               	.LFE44:
+ 2077               	.global	sleep
+ 2079               	sleep:
+ 2080               	.LFB45:
+ 2081               	.LM411:
+ 2082               	.LVL40:
+ 2083               	/* prologue: function */
+ 2084               	/* frame size = 0 */
+ 2085 0b56 982F      		mov r25,r24
+ 2086               	.LM412:
+ 2087 0b58 1092 0000 		sts delay_timer,__zero_reg__
+ 2088               	.LVL41:
+ 2089               	.L216:
+ 2090 0b5c 8091 0000 		lds r24,delay_timer
+ 2091 0b60 8917      		cp r24,r25
+ 2092 0b62 00F0      		brlo .L216
+ 2093               	/* epilogue start */
+ 2094               	.LM413:
+ 2095 0b64 0895      		ret
+ 2096               	.LFE45:
+ 2098               	.global	mSleep
+ 2100               	mSleep:
+ 2101               	.LFB46:
+ 2102               	.LM414:
+ 2103               	.LVL42:
+ 2104               	/* prologue: function */
+ 2105               	/* frame size = 0 */
+ 2106 0b66 9C01      		movw r18,r24
+ 2107 0b68 00C0      		rjmp .L220
+ 2108               	.LVL43:
+ 2109               	.L222:
+ 2110               	.LBB74:
+ 2111               	.LBB75:
+ 2112               	.LM415:
+ 2113 0b6a 1092 0000 		sts delay_timer,__zero_reg__
+ 2114               	.L221:
+ 2115 0b6e 8091 0000 		lds r24,delay_timer
+ 2116 0b72 8A30      		cpi r24,lo8(10)
+ 2117 0b74 00F0      		brlo .L221
+ 2118 0b76 2150      		subi r18,lo8(-(-1))
+ 2119 0b78 3040      		sbci r19,hi8(-(-1))
+ 2120               	.LVL44:
+ 2121               	.L220:
+ 2122               	.LBE75:
+ 2123               	.LBE74:
+ 2124               	.LM416:
+ 2125 0b7a 2115      		cp r18,__zero_reg__
+ 2126 0b7c 3105      		cpc r19,__zero_reg__
+ 2127 0b7e 01F4      		brne .L222
+ 2128               	/* epilogue start */
+ 2129               	.LM417:
+ 2130 0b80 0895      		ret
+ 2131               	.LFE46:
+ 2133               	.global	delayCycles
+ 2135               	delayCycles:
+ 2136               	.LFB47:
+ 2137               	.LM418:
+ 2138               	.LVL45:
+ 2139               	/* prologue: function */
+ 2140               	/* frame size = 0 */
+ 2141 0b82 00C0      		rjmp .L226
+ 2142               	.L227:
+ 2143               	.LM419:
+ 2144               	/* #APP */
+ 2145               	 ;  1689 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 2146 0b84 0000      		nop
+ 2147               		
+ 2148               	 ;  0 "" 2
+ 2149               	/* #NOAPP */
+ 2150 0b86 0197      		sbiw r24,1
+ 2151               	.LVL46:
+ 2152               	.L226:
+ 2153 0b88 0097      		sbiw r24,0
+ 2154 0b8a 01F4      		brne .L227
+ 2155               	/* epilogue start */
+ 2156               	.LM420:
+ 2157 0b8c 0895      		ret
+ 2158               	.LFE47:
+ 2160               	.global	extIntON
+ 2162               	extIntON:
+ 2163               	.LFB48:
+ 2164               	.LM421:
+ 2165               	/* prologue: function */
+ 2166               	/* frame size = 0 */
+ 2167               	.LM422:
+ 2168 0b8e D49A      		sbi 58-32,4
+ 2169               	.LM423:
+ 2170 0b90 DC9A      		sbi 59-32,4
+ 2171               	/* epilogue start */
+ 2172               	.LM424:
+ 2173 0b92 0895      		ret
+ 2174               	.LFE48:
+ 2176               	.global	extIntOFF
+ 2178               	extIntOFF:
+ 2179               	.LFB49:
+ 2180               	.LM425:
+ 2181               	/* prologue: function */
+ 2182               	/* frame size = 0 */
+ 2183               	.LM426:
+ 2184 0b94 DC98      		cbi 59-32,4
+ 2185               	.LM427:
+ 2186 0b96 D498      		cbi 58-32,4
+ 2187               	/* epilogue start */
+ 2188               	.LM428:
+ 2189 0b98 0895      		ret
+ 2190               	.LFE49:
+ 2192               	.global	initRobotBase
+ 2194               	initRobotBase:
+ 2195               	.LFB51:
+ 2196               	.LM429:
+ 2197               	/* prologue: function */
+ 2198               	/* frame size = 0 */
+ 2199               	.LM430:
+ 2200 0b9a 1BBA      		out 59-32,__zero_reg__
+ 2201 0b9c 18BA      		out 56-32,__zero_reg__
+ 2202 0b9e 15BA      		out 53-32,__zero_reg__
+ 2203 0ba0 81E0      		ldi r24,lo8(1)
+ 2204 0ba2 82BB      		out 50-32,r24
+ 2205 0ba4 1ABA      		out 58-32,__zero_reg__
+ 2206 0ba6 88E5      		ldi r24,lo8(88)
+ 2207 0ba8 87BB      		out 55-32,r24
+ 2208 0baa 8CE8      		ldi r24,lo8(-116)
+ 2209 0bac 84BB      		out 52-32,r24
+ 2210 0bae 82EF      		ldi r24,lo8(-14)
+ 2211 0bb0 81BB      		out 49-32,r24
+ 2212               	.LM431:
+ 2213               	/* #APP */
+ 2214               	 ;  1762 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 2215 0bb2 F894      		cli
+ 2216               	 ;  0 "" 2
+ 2217               	.LM432:
+ 2218               	/* #NOAPP */
+ 2219 0bb4 C598      		cbi 56-32,5
+ 2220 0bb6 BD9A      		sbi 55-32,5
+ 2221 0bb8 87B3      		in r24,55-32
+ 2222               	.LM433:
+ 2223 0bba 9798      		cbi 50-32,7
+ 2224               	.LBB76:
+ 2225               	.LBB77:
+ 2226               	.LM434:
+ 2227 0bbc 8E98      		cbi 49-32,6
+ 2228               	.LM435:
+ 2229 0bbe 9698      		cbi 50-32,6
+ 2230               	.LM436:
+ 2231 0bc0 BB98      		cbi 55-32,3
+ 2232               	.LM437:
+ 2233 0bc2 C398      		cbi 56-32,3
+ 2234               	.LM438:
+ 2235 0bc4 C698      		cbi 56-32,6
+ 2236               	.LM439:
+ 2237 0bc6 AF98      		cbi 53-32,7
+ 2238               	.LBE77:
+ 2239               	.LBE76:
+ 2240               	.LM440:
+ 2241 0bc8 10BC      		out 64-32,__zero_reg__
+ 2242               	.LM441:
+ 2243 0bca 8CE0      		ldi r24,lo8(12)
+ 2244 0bcc 89B9      		out 41-32,r24
+ 2245               	.LM442:
+ 2246 0bce 1BB8      		out 43-32,__zero_reg__
+ 2247               	.LM443:
+ 2248 0bd0 86E8      		ldi r24,lo8(-122)
+ 2249 0bd2 80BD      		out 64-32,r24
+ 2250               	.LM444:
+ 2251 0bd4 88E9      		ldi r24,lo8(-104)
+ 2252 0bd6 8AB9      		out 42-32,r24
+ 2253               	.LM445:
+ 2254 0bd8 17B8      		out 39-32,__zero_reg__
+ 2255               	.LM446:
+ 2256 0bda 86E1      		ldi r24,lo8(22)
+ 2257 0bdc 86B9      		out 38-32,r24
+ 2258               	.LM447:
+ 2259 0bde 10BE      		out 80-32,__zero_reg__
+ 2260               	.LM448:
+ 2261 0be0 85E0      		ldi r24,lo8(5)
+ 2262 0be2 85BF      		out 85-32,r24
+ 2263               	.LM449:
+ 2264 0be4 80EE      		ldi r24,lo8(-32)
+ 2265 0be6 8BBF      		out 91-32,r24
+ 2266               	.LM450:
+ 2267 0be8 14BE      		out 84-32,__zero_reg__
+ 2268               	.LM451:
+ 2269 0bea 8AE0      		ldi r24,lo8(10)
+ 2270 0bec 83BF      		out 83-32,r24
+ 2271               	.LM452:
+ 2272 0bee 83E6      		ldi r24,lo8(99)
+ 2273 0bf0 8CBF      		out 92-32,r24
+ 2274               	.LM453:
+ 2275 0bf2 82EA      		ldi r24,lo8(-94)
+ 2276 0bf4 8FBD      		out 79-32,r24
+ 2277               	.LM454:
+ 2278 0bf6 81E1      		ldi r24,lo8(17)
+ 2279 0bf8 8EBD      		out 78-32,r24
+ 2280               	.LM455:
+ 2281 0bfa 82ED      		ldi r24,lo8(210)
+ 2282 0bfc 90E0      		ldi r25,hi8(210)
+ 2283 0bfe 97BD      		out (70)+1-32,r25
+ 2284 0c00 86BD      		out 70-32,r24
+ 2285               	.LM456:
+ 2286 0c02 1ABC      		out 74-32,__zero_reg__
+ 2287               	.LM457:
+ 2288 0c04 18BC      		out 72-32,__zero_reg__
+ 2289               	.LM458:
+ 2290 0c06 80E0      		ldi r24,lo8(0)
+ 2291 0c08 60E0      		ldi r22,lo8(0)
+ 2292 0c0a 0E94 0000 		call setMotorDir
+ 2293               	.LM459:
+ 2294 0c0e 89E0      		ldi r24,lo8(9)
+ 2295 0c10 85BD      		out 69-32,r24
+ 2296               	.LM460:
+ 2297 0c12 8EE6      		ldi r24,lo8(110)
+ 2298 0c14 83BD      		out 67-32,r24
+ 2299               	.LM461:
+ 2300 0c16 82E0      		ldi r24,lo8(2)
+ 2301 0c18 89BF      		out 89-32,r24
+ 2302               	.LM462:
+ 2303 0c1a 8091 0000 		lds r24,sysStatACS
+ 2304 0c1e 8160      		ori r24,lo8(1)
+ 2305 0c20 8093 0000 		sts sysStatACS,r24
+ 2306               	.LM463:
+ 2307 0c24 81E0      		ldi r24,lo8(1)
+ 2308 0c26 8093 0000 		sts acs_state,r24
+ 2309               	.LM464:
+ 2310               	/* #APP */
+ 2311               	 ;  1827 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 2312 0c2a 7894      		sei
+ 2313               	 ;  0 "" 2
+ 2314               	/* epilogue start */
+ 2315               	.LM465:
+ 2316               	/* #NOAPP */
+ 2317 0c2c 0895      		ret
+ 2318               	.LFE51:
+ 2320               	.global	emergencyShutdown
+ 2322               	emergencyShutdown:
+ 2323               	.LFB18:
+ 2324               	.LM466:
+ 2325               	.LVL47:
+ 2326 0c2e 1F93      		push r17
+ 2327               	/* prologue: function */
+ 2328               	/* frame size = 0 */
+ 2329 0c30 182F      		mov r17,r24
+ 2330               	.LM467:
+ 2331               	/* #APP */
+ 2332               	 ;  493 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 2333 0c32 F894      		cli
+ 2334               	 ;  0 "" 2
+ 2335               	.LM468:
+ 2336               	/* #NOAPP */
+ 2337 0c34 9798      		cbi 50-32,7
+ 2338               	.LBB78:
+ 2339               	.LBB79:
+ 2340               	.LM469:
+ 2341 0c36 8E98      		cbi 49-32,6
+ 2342               	.LM470:
+ 2343 0c38 9698      		cbi 50-32,6
+ 2344               	.LM471:
+ 2345 0c3a BB98      		cbi 55-32,3
+ 2346               	.LM472:
+ 2347 0c3c C398      		cbi 56-32,3
+ 2348               	.LM473:
+ 2349 0c3e C698      		cbi 56-32,6
+ 2350               	.LM474:
+ 2351 0c40 AF98      		cbi 53-32,7
+ 2352               	.LBE79:
+ 2353               	.LBE78:
+ 2354               	.LM475:
+ 2355 0c42 1092 0000 		sts (mleft_power)+1,__zero_reg__
+ 2356 0c46 1092 0000 		sts mleft_power,__zero_reg__
+ 2357               	.LM476:
+ 2358 0c4a 1092 0000 		sts (mright_power)+1,__zero_reg__
+ 2359 0c4e 1092 0000 		sts mright_power,__zero_reg__
+ 2360               	.LM477:
+ 2361 0c52 1092 0000 		sts (left_i)+1,__zero_reg__
+ 2362 0c56 1092 0000 		sts left_i,__zero_reg__
+ 2363               	.LM478:
+ 2364 0c5a 1092 0000 		sts (right_i)+1,__zero_reg__
+ 2365 0c5e 1092 0000 		sts right_i,__zero_reg__
+ 2366               	.LM479:
+ 2367 0c62 1092 0000 		sts mleft_ptmp,__zero_reg__
+ 2368               	.LM480:
+ 2369 0c66 1092 0000 		sts mright_ptmp,__zero_reg__
+ 2370               	.LM481:
+ 2371 0c6a 1ABC      		out 74-32,__zero_reg__
+ 2372               	.LM482:
+ 2373 0c6c 18BC      		out 72-32,__zero_reg__
+ 2374               	.LM483:
+ 2375 0c6e 1FBC      		out 79-32,__zero_reg__
+ 2376               	.LBB80:
+ 2377               	.LBB81:
+ 2378               	.LM484:
+ 2379 0c70 C498      		cbi 56-32,4
+ 2380               	.LM485:
+ 2381 0c72 8091 0000 		lds r24,leds_on
+ 2382               	.LVL48:
+ 2383 0c76 8430      		cpi r24,lo8(4)
+ 2384 0c78 00F4      		brsh .L236
+ 2385               	.LM486:
+ 2386 0c7a 8823      		tst r24
+ 2387 0c7c 01F4      		brne .L254
+ 2388               	.L237:
+ 2389 0c7e 20E0      		ldi r18,lo8(0)
+ 2390 0c80 30E0      		ldi r19,hi8(0)
+ 2391 0c82 8091 0000 		lds r24,statusLEDs
+ 2392 0c86 8823      		tst r24
+ 2393 0c88 01F0      		breq .L238
+ 2394               	.L254:
+ 2395 0c8a 21E0      		ldi r18,lo8(1)
+ 2396 0c8c 30E0      		ldi r19,hi8(1)
+ 2397               	.L238:
+ 2398 0c8e 2093 0000 		sts leds_on,r18
+ 2399               	.L236:
+ 2400               	.LBE81:
+ 2401               	.LBE80:
+ 2402               	.LM487:
+ 2403 0c92 80E0      		ldi r24,lo8(__c.1986)
+ 2404 0c94 90E0      		ldi r25,hi8(__c.1986)
+ 2405 0c96 0E94 0000 		call writeNStringP
+ 2406               	.LM488:
+ 2407 0c9a 80E0      		ldi r24,lo8(__c.1988)
+ 2408 0c9c 90E0      		ldi r25,hi8(__c.1988)
+ 2409 0c9e 0E94 0000 		call writeNStringP
+ 2410               	.LM489:
+ 2411 0ca2 812F      		mov r24,r17
+ 2412 0ca4 8150      		subi r24,lo8(-(-1))
+ 2413 0ca6 8230      		cpi r24,lo8(2)
+ 2414 0ca8 00F4      		brsh .L240
+ 2415               	.LM490:
+ 2416 0caa 80E0      		ldi r24,lo8(__c.1990)
+ 2417 0cac 90E0      		ldi r25,hi8(__c.1990)
+ 2418 0cae 0E94 0000 		call writeNStringP
+ 2419               	.LM491:
+ 2420 0cb2 80E0      		ldi r24,lo8(__c.1992)
+ 2421 0cb4 90E0      		ldi r25,hi8(__c.1992)
+ 2422 0cb6 0E94 0000 		call writeNStringP
+ 2423               	.LM492:
+ 2424 0cba 1130      		cpi r17,lo8(1)
+ 2425 0cbc 01F4      		brne .L241
+ 2426               	.LM493:
+ 2427 0cbe 80E0      		ldi r24,lo8(__c.1994)
+ 2428 0cc0 90E0      		ldi r25,hi8(__c.1994)
+ 2429 0cc2 00C0      		rjmp .L255
+ 2430               	.L241:
+ 2431               	.LM494:
+ 2432 0cc4 80E0      		ldi r24,lo8(__c.1996)
+ 2433 0cc6 90E0      		ldi r25,hi8(__c.1996)
+ 2434               	.L255:
+ 2435 0cc8 0E94 0000 		call writeNStringP
+ 2436               	.LM495:
+ 2437 0ccc 80E0      		ldi r24,lo8(__c.1998)
+ 2438 0cce 90E0      		ldi r25,hi8(__c.1998)
+ 2439 0cd0 0E94 0000 		call writeNStringP
+ 2440               	.LM496:
+ 2441 0cd4 80E0      		ldi r24,lo8(__c.2000)
+ 2442 0cd6 90E0      		ldi r25,hi8(__c.2000)
+ 2443 0cd8 00C0      		rjmp .L256
+ 2444               	.L240:
+ 2445               	.LM497:
+ 2446 0cda 1330      		cpi r17,lo8(3)
+ 2447 0cdc 01F4      		brne .L243
+ 2448               	.LM498:
+ 2449 0cde 80E0      		ldi r24,lo8(__c.2002)
+ 2450 0ce0 90E0      		ldi r25,hi8(__c.2002)
+ 2451 0ce2 0E94 0000 		call writeNStringP
+ 2452               	.LM499:
+ 2453 0ce6 80E0      		ldi r24,lo8(__c.2004)
+ 2454 0ce8 90E0      		ldi r25,hi8(__c.2004)
+ 2455 0cea 0E94 0000 		call writeNStringP
+ 2456               	.LM500:
+ 2457 0cee 80E0      		ldi r24,lo8(__c.2006)
+ 2458 0cf0 90E0      		ldi r25,hi8(__c.2006)
+ 2459               	.L256:
+ 2460 0cf2 0E94 0000 		call writeNStringP
+ 2461               	.L243:
+ 2462               	.LM501:
+ 2463 0cf6 80E0      		ldi r24,lo8(__c.2008)
+ 2464 0cf8 90E0      		ldi r25,hi8(__c.2008)
+ 2465 0cfa 0E94 0000 		call writeNStringP
+ 2466               	.LBB82:
+ 2467               	.LBB83:
+ 2468               	.LBB84:
+ 2469               	.LM502:
+ 2470 0cfe 16E3      		ldi r17,lo8(54)
+ 2471               	.LVL49:
+ 2472               	.L250:
+ 2473 0d00 1093 0000 		sts statusLEDs,r17
+ 2474               	.LM503:
+ 2475 0d04 0E94 0000 		call updateStatusLEDs
+ 2476               	.LVL50:
+ 2477 0d08 2AE0      		ldi r18,lo8(10)
+ 2478               	.LVL51:
+ 2479 0d0a 00C0      		rjmp .L244
+ 2480               	.LVL52:
+ 2481               	.L245:
+ 2482               	.LBE84:
+ 2483               	.LBE83:
+ 2484               	.LBB85:
+ 2485               	.LBB86:
+ 2486               	.LM504:
+ 2487               	/* #APP */
+ 2488               	 ;  1689 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 2489 0d0c 0000      		nop
+ 2490               		
+ 2491               	 ;  0 "" 2
+ 2492               	/* #NOAPP */
+ 2493               	.L247:
+ 2494 0d0e 0197      		sbiw r24,1
+ 2495 0d10 3FEF      		ldi r19,hi8(-1)
+ 2496 0d12 8F3F      		cpi r24,lo8(-1)
+ 2497 0d14 9307      		cpc r25,r19
+ 2498 0d16 01F4      		brne .L245
+ 2499               	.LBE86:
+ 2500               	.LBE85:
+ 2501               	.LM505:
+ 2502 0d18 2150      		subi r18,lo8(-(-1))
+ 2503 0d1a 01F0      		breq .L246
+ 2504               	.L244:
+ 2505 0d1c 80E0      		ldi r24,lo8(-32768)
+ 2506 0d1e 90E8      		ldi r25,hi8(-32768)
+ 2507 0d20 00C0      		rjmp .L247
+ 2508               	.L246:
+ 2509               	.LBB87:
+ 2510               	.LBB88:
+ 2511               	.LM506:
+ 2512 0d22 1092 0000 		sts statusLEDs,__zero_reg__
+ 2513               	.LM507:
+ 2514 0d26 0E94 0000 		call updateStatusLEDs
+ 2515               	.LVL53:
+ 2516 0d2a 2AE0      		ldi r18,lo8(10)
+ 2517               	.LVL54:
+ 2518 0d2c 00C0      		rjmp .L248
+ 2519               	.L249:
+ 2520               	.LBE88:
+ 2521               	.LBE87:
+ 2522               	.LBB89:
+ 2523               	.LBB90:
+ 2524               	.LM508:
+ 2525               	/* #APP */
+ 2526               	 ;  1689 "../../library/RP6base/RP6RobotBaseLib.c" 1
+ 2527 0d2e 0000      		nop
+ 2528               		
+ 2529               	 ;  0 "" 2
+ 2530               	/* #NOAPP */
+ 2531 0d30 0197      		sbiw r24,1
+ 2532 0d32 01F4      		brne .L249
+ 2533               	.LBE90:
+ 2534               	.LBE89:
+ 2535               	.LM509:
+ 2536 0d34 2150      		subi r18,lo8(-(-1))
+ 2537 0d36 01F0      		breq .L250
+ 2538               	.L248:
+ 2539 0d38 8FEF      		ldi r24,lo8(-1)
+ 2540 0d3a 9FEF      		ldi r25,hi8(-1)
+ 2541 0d3c 00C0      		rjmp .L249
+ 2542               	.LBE82:
+ 2543               	.LFE18:
+ 2545               	.global	task_motionControl
+ 2547               	task_motionControl:
+ 2548               	.LFB19:
+ 2549               	.LM510:
+ 2550               	/* prologue: function */
+ 2551               	/* frame size = 0 */
+ 2552               	.LM511:
+ 2553 0d3e 8091 0000 		lds r24,overcurrent_timer
+ 2554 0d42 8233      		cpi r24,lo8(50)
+ 2555 0d44 00F4      		brsh .+2
+ 2556 0d46 00C0      		rjmp .L258
+ 2557               	.LM512:
+ 2558 0d48 1092 0000 		sts overcurrent_timer,__zero_reg__
+ 2559               	.LM513:
+ 2560 0d4c 8091 0000 		lds r24,overcurrent_timeout
+ 2561 0d50 8823      		tst r24
+ 2562 0d52 01F0      		breq .+2
+ 2563 0d54 00C0      		rjmp .L259
+ 2564               	.LM514:
+ 2565 0d56 8091 0000 		lds r24,adcMotorCurrentLeft
+ 2566 0d5a 9091 0000 		lds r25,(adcMotorCurrentLeft)+1
+ 2567 0d5e 8350      		subi r24,lo8(771)
+ 2568 0d60 9340      		sbci r25,hi8(771)
+ 2569 0d62 00F4      		brsh .L260
+ 2570 0d64 8091 0000 		lds r24,adcMotorCurrentRight
+ 2571 0d68 9091 0000 		lds r25,(adcMotorCurrentRight)+1
+ 2572 0d6c 8350      		subi r24,lo8(771)
+ 2573 0d6e 9340      		sbci r25,hi8(771)
+ 2574 0d70 00F0      		brlo .L261
+ 2575               	.L260:
+ 2576               	.LM515:
+ 2577 0d72 8091 0000 		lds r24,overcurrent_errors
+ 2578 0d76 8F5F      		subi r24,lo8(-(1))
+ 2579 0d78 8093 0000 		sts overcurrent_errors,r24
+ 2580               	.LM516:
+ 2581 0d7c 8AE0      		ldi r24,lo8(10)
+ 2582 0d7e 8093 0000 		sts overcurrent_timeout,r24
+ 2583               	.LM517:
+ 2584 0d82 1092 0000 		sts (mleft_power)+1,__zero_reg__
+ 2585 0d86 1092 0000 		sts mleft_power,__zero_reg__
+ 2586               	.LM518:
+ 2587 0d8a 1092 0000 		sts (mright_power)+1,__zero_reg__
+ 2588 0d8e 1092 0000 		sts mright_power,__zero_reg__
+ 2589               	.LM519:
+ 2590 0d92 1092 0000 		sts (left_i)+1,__zero_reg__
+ 2591 0d96 1092 0000 		sts left_i,__zero_reg__
+ 2592               	.LM520:
+ 2593 0d9a 1092 0000 		sts (right_i)+1,__zero_reg__
+ 2594 0d9e 1092 0000 		sts right_i,__zero_reg__
+ 2595               	.LM521:
+ 2596 0da2 8091 0000 		lds r24,motion_status
+ 2597 0da6 8460      		ori r24,lo8(4)
+ 2598 0da8 8093 0000 		sts motion_status,r24
+ 2599 0dac 0895      		ret
+ 2600               	.L261:
+ 2601               	.LM522:
+ 2602 0dae 8091 0000 		lds r24,motion_status
+ 2603 0db2 8B7F      		andi r24,lo8(-5)
+ 2604 0db4 8093 0000 		sts motion_status,r24
+ 2605               	.LM523:
+ 2606 0db8 8091 0000 		lds r24,overcurrent_error_clear
+ 2607 0dbc 8536      		cpi r24,lo8(101)
+ 2608 0dbe 00F0      		brlo .L263
+ 2609               	.LM524:
+ 2610 0dc0 1092 0000 		sts overcurrent_errors,__zero_reg__
+ 2611               	.LM525:
+ 2612 0dc4 1092 0000 		sts overcurrent_error_clear,__zero_reg__
+ 2613 0dc8 00C0      		rjmp .L259
+ 2614               	.L263:
+ 2615               	.LM526:
+ 2616 0dca 8091 0000 		lds r24,overcurrent_errors
+ 2617 0dce 8330      		cpi r24,lo8(3)
+ 2618 0dd0 00F0      		brlo .L259
+ 2619               	.LM527:
+ 2620 0dd2 83E0      		ldi r24,lo8(3)
+ 2621 0dd4 0E94 0000 		call emergencyShutdown
+ 2622               	.L259:
+ 2623               	.LM528:
+ 2624 0dd8 8091 0000 		lds r24,adcMotorCurrentLeft
+ 2625 0ddc 9091 0000 		lds r25,(adcMotorCurrentLeft)+1
+ 2626 0de0 8639      		cpi r24,150
+ 2627 0de2 9105      		cpc r25,__zero_reg__
+ 2628 0de4 00F4      		brsh .L264
+ 2629 0de6 8091 0000 		lds r24,mleft_speed
+ 2630 0dea 9091 0000 		lds r25,(mleft_speed)+1
+ 2631 0dee 892B      		or r24,r25
+ 2632 0df0 01F4      		brne .L264
+ 2633 0df2 8091 0000 		lds r24,mleft_des_speed
+ 2634 0df6 9091 0000 		lds r25,(mleft_des_speed)+1
+ 2635 0dfa 892B      		or r24,r25
+ 2636 0dfc 01F0      		breq .L264
+ 2637 0dfe 8091 0000 		lds r24,mleft_ptmp
+ 2638 0e02 8739      		cpi r24,lo8(-105)
+ 2639 0e04 00F0      		brlo .L264
+ 2640               	.LM529:
+ 2641 0e06 81E0      		ldi r24,lo8(1)
+ 2642 0e08 0E94 0000 		call emergencyShutdown
+ 2643               	.L264:
+ 2644               	.LM530:
+ 2645 0e0c 8091 0000 		lds r24,adcMotorCurrentRight
+ 2646 0e10 9091 0000 		lds r25,(adcMotorCurrentRight)+1
+ 2647 0e14 8639      		cpi r24,150
+ 2648 0e16 9105      		cpc r25,__zero_reg__
+ 2649 0e18 00F4      		brsh .L258
+ 2650 0e1a 8091 0000 		lds r24,mright_speed
+ 2651 0e1e 9091 0000 		lds r25,(mright_speed)+1
+ 2652 0e22 892B      		or r24,r25
+ 2653 0e24 01F4      		brne .L258
+ 2654 0e26 8091 0000 		lds r24,mright_des_speed
+ 2655 0e2a 9091 0000 		lds r25,(mright_des_speed)+1
+ 2656 0e2e 892B      		or r24,r25
+ 2657 0e30 01F0      		breq .L258
+ 2658 0e32 8091 0000 		lds r24,mright_ptmp
+ 2659 0e36 8739      		cpi r24,lo8(-105)
+ 2660 0e38 00F0      		brlo .L258
+ 2661               	.LM531:
+ 2662 0e3a 82E0      		ldi r24,lo8(2)
+ 2663 0e3c 0E94 0000 		call emergencyShutdown
+ 2664               	.L258:
+ 2665               	.LM532:
+ 2666 0e40 8091 0000 		lds r24,motor_control
+ 2667 0e44 8823      		tst r24
+ 2668 0e46 01F4      		brne .+2
+ 2669 0e48 00C0      		rjmp .L265
+ 2670               	.LM533:
+ 2671 0e4a 8091 0000 		lds r24,overcurrent_timeout
+ 2672 0e4e 8823      		tst r24
+ 2673 0e50 01F0      		breq .+2
+ 2674 0e52 00C0      		rjmp .L266
+ 2675               	.LBB91:
+ 2676               	.LM534:
+ 2677 0e54 8091 0000 		lds r24,overcurrent_errors
+ 2678 0e58 8823      		tst r24
+ 2679 0e5a 01F0      		breq .L267
+ 2680               	.LM535:
+ 2681 0e5c 8091 0000 		lds r24,overcurrent_error_clear
+ 2682 0e60 8F5F      		subi r24,lo8(-(1))
+ 2683 0e62 8093 0000 		sts overcurrent_error_clear,r24
+ 2684 0e66 00C0      		rjmp .L268
+ 2685               	.L267:
+ 2686               	.LM536:
+ 2687 0e68 1092 0000 		sts overcurrent_error_clear,__zero_reg__
+ 2688               	.L268:
+ 2689               	.LM537:
+ 2690 0e6c 4091 0000 		lds r20,motion_status
+ 2691 0e70 41FF      		sbrs r20,1
+ 2692 0e72 00C0      		rjmp .L269
+ 2693               	.LM538:
+ 2694 0e74 2091 0000 		lds r18,mleft_dist
+ 2695 0e78 3091 0000 		lds r19,(mleft_dist)+1
+ 2696 0e7c 8091 0000 		lds r24,preStop_R
+ 2697 0e80 9091 0000 		lds r25,(preStop_R)+1
+ 2698 0e84 2817      		cp r18,r24
+ 2699 0e86 3907      		cpc r19,r25
+ 2700 0e88 00F0      		brlo .L270
+ 2701               	.LM539:
+ 2702 0e8a 1092 0000 		sts (mleft_des_speed)+1,__zero_reg__
+ 2703 0e8e 1092 0000 		sts mleft_des_speed,__zero_reg__
+ 2704               	.LM540:
+ 2705 0e92 1092 0000 		sts (left_i)+1,__zero_reg__
+ 2706 0e96 1092 0000 		sts left_i,__zero_reg__
+ 2707               	.LM541:
+ 2708 0e9a 1092 0000 		sts (mleft_power)+1,__zero_reg__
+ 2709 0e9e 1092 0000 		sts mleft_power,__zero_reg__
+ 2710               	.LM542:
+ 2711 0ea2 4D7F      		andi r20,lo8(-3)
+ 2712 0ea4 4093 0000 		sts motion_status,r20
+ 2713 0ea8 00C0      		rjmp .L269
+ 2714               	.L270:
+ 2715               	.LM543:
+ 2716 0eaa 2091 0000 		lds r18,mleft_dist
+ 2717 0eae 3091 0000 		lds r19,(mleft_dist)+1
+ 2718 0eb2 8091 0000 		lds r24,preDecelerate_R
+ 2719 0eb6 9091 0000 		lds r25,(preDecelerate_R)+1
+ 2720 0eba 2817      		cp r18,r24
+ 2721 0ebc 3907      		cpc r19,r25
+ 2722 0ebe 00F0      		brlo .L269
+ 2723               	.LM544:
+ 2724 0ec0 8091 0000 		lds r24,mleft_des_speed
+ 2725 0ec4 9091 0000 		lds r25,(mleft_des_speed)+1
+ 2726 0ec8 9695      		lsr r25
+ 2727 0eca 8795      		ror r24
+ 2728 0ecc 9093 0000 		sts (mleft_des_speed)+1,r25
+ 2729 0ed0 8093 0000 		sts mleft_des_speed,r24
+ 2730               	.LM545:
+ 2731 0ed4 4697      		sbiw r24,22
+ 2732 0ed6 00F4      		brsh .L269
+ 2733 0ed8 86E1      		ldi r24,lo8(22)
+ 2734 0eda 90E0      		ldi r25,hi8(22)
+ 2735 0edc 9093 0000 		sts (mleft_des_speed)+1,r25
+ 2736 0ee0 8093 0000 		sts mleft_des_speed,r24
+ 2737               	.L269:
+ 2738               	.LM546:
+ 2739 0ee4 4091 0000 		lds r20,motion_status
+ 2740 0ee8 40FF      		sbrs r20,0
+ 2741 0eea 00C0      		rjmp .L271
+ 2742               	.LM547:
+ 2743 0eec 2091 0000 		lds r18,mright_dist
+ 2744 0ef0 3091 0000 		lds r19,(mright_dist)+1
+ 2745 0ef4 8091 0000 		lds r24,preStop_L
+ 2746 0ef8 9091 0000 		lds r25,(preStop_L)+1
+ 2747 0efc 2817      		cp r18,r24
+ 2748 0efe 3907      		cpc r19,r25
+ 2749 0f00 00F0      		brlo .L272
+ 2750               	.LM548:
+ 2751 0f02 1092 0000 		sts (mright_des_speed)+1,__zero_reg__
+ 2752 0f06 1092 0000 		sts mright_des_speed,__zero_reg__
+ 2753               	.LM549:
+ 2754 0f0a 1092 0000 		sts (right_i)+1,__zero_reg__
+ 2755 0f0e 1092 0000 		sts right_i,__zero_reg__
+ 2756               	.LM550:
+ 2757 0f12 1092 0000 		sts (mright_power)+1,__zero_reg__
+ 2758 0f16 1092 0000 		sts mright_power,__zero_reg__
+ 2759               	.LM551:
+ 2760 0f1a 4E7F      		andi r20,lo8(-2)
+ 2761 0f1c 4093 0000 		sts motion_status,r20
+ 2762 0f20 00C0      		rjmp .L271
+ 2763               	.L272:
+ 2764               	.LM552:
+ 2765 0f22 2091 0000 		lds r18,mright_dist
+ 2766 0f26 3091 0000 		lds r19,(mright_dist)+1
+ 2767 0f2a 8091 0000 		lds r24,preDecelerate_L
+ 2768 0f2e 9091 0000 		lds r25,(preDecelerate_L)+1
+ 2769 0f32 2817      		cp r18,r24
+ 2770 0f34 3907      		cpc r19,r25
+ 2771 0f36 00F0      		brlo .L271
+ 2772               	.LM553:
+ 2773 0f38 8091 0000 		lds r24,mright_des_speed
+ 2774 0f3c 9091 0000 		lds r25,(mright_des_speed)+1
+ 2775 0f40 9695      		lsr r25
+ 2776 0f42 8795      		ror r24
+ 2777 0f44 9093 0000 		sts (mright_des_speed)+1,r25
+ 2778 0f48 8093 0000 		sts mright_des_speed,r24
+ 2779               	.LM554:
+ 2780 0f4c 4697      		sbiw r24,22
+ 2781 0f4e 00F4      		brsh .L271
+ 2782 0f50 86E1      		ldi r24,lo8(22)
+ 2783 0f52 90E0      		ldi r25,hi8(22)
+ 2784 0f54 9093 0000 		sts (mright_des_speed)+1,r25
+ 2785 0f58 8093 0000 		sts mright_des_speed,r24
+ 2786               	.L271:
+ 2787               	.LM555:
+ 2788 0f5c 4091 0000 		lds r20,mleft_des_dir
+ 2789 0f60 8091 0000 		lds r24,mleft_dir
+ 2790 0f64 4817      		cp r20,r24
+ 2791 0f66 01F4      		brne .L273
+ 2792 0f68 9091 0000 		lds r25,mright_des_dir
+ 2793 0f6c 8091 0000 		lds r24,mright_dir
+ 2794 0f70 9817      		cp r25,r24
+ 2795 0f72 01F4      		brne .+2
+ 2796 0f74 00C0      		rjmp .L274
+ 2797               	.L273:
+ 2798               	.LM556:
+ 2799 0f76 2091 0000 		lds r18,mleft_des_speed
+ 2800 0f7a 3091 0000 		lds r19,(mleft_des_speed)+1
+ 2801 0f7e 2115      		cp r18,__zero_reg__
+ 2802 0f80 3105      		cpc r19,__zero_reg__
+ 2803 0f82 01F4      		brne .L275
+ 2804 0f84 8091 0000 		lds r24,mright_des_speed
+ 2805 0f88 9091 0000 		lds r25,(mright_des_speed)+1
+ 2806 0f8c 892B      		or r24,r25
+ 2807 0f8e 01F0      		breq .L276
+ 2808               	.L275:
+ 2809               	.LM557:
+ 2810 0f90 3093 0000 		sts (mleft_des_speed_tmp)+1,r19
+ 2811 0f94 2093 0000 		sts mleft_des_speed_tmp,r18
+ 2812               	.LM558:
+ 2813 0f98 8091 0000 		lds r24,mright_des_speed
+ 2814 0f9c 9091 0000 		lds r25,(mright_des_speed)+1
+ 2815 0fa0 9093 0000 		sts (mright_des_speed_tmp)+1,r25
+ 2816 0fa4 8093 0000 		sts mright_des_speed_tmp,r24
+ 2817               	.LM559:
+ 2818 0fa8 1092 0000 		sts (mleft_des_speed)+1,__zero_reg__
+ 2819 0fac 1092 0000 		sts mleft_des_speed,__zero_reg__
+ 2820               	.LM560:
+ 2821 0fb0 1092 0000 		sts (mright_des_speed)+1,__zero_reg__
+ 2822 0fb4 1092 0000 		sts mright_des_speed,__zero_reg__
+ 2823               	.LM561:
+ 2824 0fb8 8091 0000 		lds r24,left_i
+ 2825 0fbc 9091 0000 		lds r25,(left_i)+1
+ 2826 0fc0 62E0      		ldi r22,lo8(2)
+ 2827 0fc2 70E0      		ldi r23,hi8(2)
+ 2828 0fc4 0E94 0000 		call __divmodhi4
+ 2829 0fc8 7093 0000 		sts (left_i)+1,r23
+ 2830 0fcc 6093 0000 		sts left_i,r22
+ 2831               	.LM562:
+ 2832 0fd0 8091 0000 		lds r24,right_i
+ 2833 0fd4 9091 0000 		lds r25,(right_i)+1
+ 2834 0fd8 62E0      		ldi r22,lo8(2)
+ 2835 0fda 70E0      		ldi r23,hi8(2)
+ 2836 0fdc 0E94 0000 		call __divmodhi4
+ 2837 0fe0 7093 0000 		sts (right_i)+1,r23
+ 2838 0fe4 6093 0000 		sts right_i,r22
+ 2839               	.L276:
+ 2840               	.LM563:
+ 2841 0fe8 8091 0000 		lds r24,mright_speed
+ 2842 0fec 9091 0000 		lds r25,(mright_speed)+1
+ 2843 0ff0 4A97      		sbiw r24,26
+ 2844 0ff2 00F4      		brsh .L277
+ 2845 0ff4 8091 0000 		lds r24,mleft_speed
+ 2846 0ff8 9091 0000 		lds r25,(mleft_speed)+1
+ 2847 0ffc 4A97      		sbiw r24,26
+ 2848 0ffe 00F4      		brsh .L277
+ 2849 1000 8091 0000 		lds r24,mleft_des_speed
+ 2850 1004 9091 0000 		lds r25,(mleft_des_speed)+1
+ 2851 1008 892B      		or r24,r25
+ 2852 100a 01F4      		brne .L277
+ 2853 100c 8091 0000 		lds r24,mright_des_speed
+ 2854 1010 9091 0000 		lds r25,(mright_des_speed)+1
+ 2855 1014 892B      		or r24,r25
+ 2856 1016 01F4      		brne .L277
+ 2857               	.LM564:
+ 2858 1018 1092 0000 		sts (mright_power)+1,__zero_reg__
+ 2859 101c 1092 0000 		sts mright_power,__zero_reg__
+ 2860               	.LM565:
+ 2861 1020 1092 0000 		sts (mleft_power)+1,__zero_reg__
+ 2862 1024 1092 0000 		sts mleft_power,__zero_reg__
+ 2863               	.L277:
+ 2864               	.LM566:
+ 2865 1028 8FB5      		in r24,79-32
+ 2866 102a 8823      		tst r24
+ 2867 102c 01F4      		brne .L274
+ 2868               	.LM567:
+ 2869 102e 842F      		mov r24,r20
+ 2870 1030 6091 0000 		lds r22,mright_des_dir
+ 2871 1034 0E94 0000 		call setMotorDir
+ 2872               	.LM568:
+ 2873 1038 8091 0000 		lds r24,mleft_des_speed_tmp
+ 2874 103c 9091 0000 		lds r25,(mleft_des_speed_tmp)+1
+ 2875 1040 9093 0000 		sts (mleft_des_speed)+1,r25
+ 2876 1044 8093 0000 		sts mleft_des_speed,r24
+ 2877               	.LM569:
+ 2878 1048 8091 0000 		lds r24,mright_des_speed_tmp
+ 2879 104c 9091 0000 		lds r25,(mright_des_speed_tmp)+1
+ 2880 1050 9093 0000 		sts (mright_des_speed)+1,r25
+ 2881 1054 8093 0000 		sts mright_des_speed,r24
+ 2882               	.LM570:
+ 2883 1058 1092 0000 		sts (left_i)+1,__zero_reg__
+ 2884 105c 1092 0000 		sts left_i,__zero_reg__
+ 2885               	.LM571:
+ 2886 1060 1092 0000 		sts (right_i)+1,__zero_reg__
+ 2887 1064 1092 0000 		sts right_i,__zero_reg__
+ 2888               	.L274:
+ 2889               	.LM572:
+ 2890 1068 4091 0000 		lds r20,mleft_des_speed
+ 2891 106c 5091 0000 		lds r21,(mleft_des_speed)+1
+ 2892 1070 8091 0000 		lds r24,mleft_speed
+ 2893 1074 9091 0000 		lds r25,(mleft_speed)+1
+ 2894               	.LM573:
+ 2895 1078 9A01      		movw r18,r20
+ 2896 107a 281B      		sub r18,r24
+ 2897 107c 390B      		sbc r19,r25
+ 2898 107e C901      		movw r24,r18
+ 2899 1080 2091 0000 		lds r18,left_i
+ 2900 1084 3091 0000 		lds r19,(left_i)+1
+ 2901 1088 820F      		add r24,r18
+ 2902 108a 931F      		adc r25,r19
+ 2903 108c 9093 0000 		sts (left_i)+1,r25
+ 2904 1090 8093 0000 		sts left_i,r24
+ 2905               	.LM574:
+ 2906 1094 855A      		subi r24,lo8(421)
+ 2907 1096 9140      		sbci r25,hi8(421)
+ 2908 1098 04F0      		brlt .L278
+ 2909 109a 84EA      		ldi r24,lo8(420)
+ 2910 109c 91E0      		ldi r25,hi8(420)
+ 2911 109e 9093 0000 		sts (left_i)+1,r25
+ 2912 10a2 8093 0000 		sts left_i,r24
+ 2913               	.L278:
+ 2914               	.LM575:
+ 2915 10a6 8091 0000 		lds r24,left_i
+ 2916 10aa 9091 0000 		lds r25,(left_i)+1
+ 2917 10ae 8C55      		subi r24,lo8(-420)
+ 2918 10b0 9E4F      		sbci r25,hi8(-420)
+ 2919 10b2 04F4      		brge .L279
+ 2920 10b4 8CE5      		ldi r24,lo8(-420)
+ 2921 10b6 9EEF      		ldi r25,hi8(-420)
+ 2922 10b8 9093 0000 		sts (left_i)+1,r25
+ 2923 10bc 8093 0000 		sts left_i,r24
+ 2924               	.L279:
+ 2925               	.LM576:
+ 2926 10c0 8091 0000 		lds r24,mleft_speed
+ 2927 10c4 9091 0000 		lds r25,(mleft_speed)+1
+ 2928 10c8 892B      		or r24,r25
+ 2929 10ca 01F4      		brne .L280
+ 2930 10cc 452B      		or r20,r21
+ 2931 10ce 01F4      		brne .L280
+ 2932               	.LM577:
+ 2933 10d0 1092 0000 		sts (left_i)+1,__zero_reg__
+ 2934 10d4 1092 0000 		sts left_i,__zero_reg__
+ 2935               	.L280:
+ 2936               	.LM578:
+ 2937 10d8 8091 0000 		lds r24,left_i
+ 2938 10dc 9091 0000 		lds r25,(left_i)+1
+ 2939 10e0 62E0      		ldi r22,lo8(2)
+ 2940 10e2 70E0      		ldi r23,hi8(2)
+ 2941 10e4 0E94 0000 		call __divmodhi4
+ 2942 10e8 7093 0000 		sts (mleft_power)+1,r23
+ 2943 10ec 6093 0000 		sts mleft_power,r22
+ 2944               	.LM579:
+ 2945 10f0 633D      		cpi r22,211
+ 2946 10f2 7105      		cpc r23,__zero_reg__
+ 2947 10f4 04F0      		brlt .L281
+ 2948 10f6 82ED      		ldi r24,lo8(210)
+ 2949 10f8 90E0      		ldi r25,hi8(210)
+ 2950 10fa 9093 0000 		sts (mleft_power)+1,r25
+ 2951 10fe 8093 0000 		sts mleft_power,r24
+ 2952               	.L281:
+ 2953               	.LM580:
+ 2954 1102 8091 0000 		lds r24,mleft_power
+ 2955 1106 9091 0000 		lds r25,(mleft_power)+1
+ 2956 110a 97FF      		sbrs r25,7
+ 2957 110c 00C0      		rjmp .L282
+ 2958 110e 1092 0000 		sts (mleft_power)+1,__zero_reg__
+ 2959 1112 1092 0000 		sts mleft_power,__zero_reg__
+ 2960               	.L282:
+ 2961               	.LM581:
+ 2962 1116 4091 0000 		lds r20,mright_des_speed
+ 2963 111a 5091 0000 		lds r21,(mright_des_speed)+1
+ 2964 111e 8091 0000 		lds r24,mright_speed
+ 2965 1122 9091 0000 		lds r25,(mright_speed)+1
+ 2966               	.LM582:
+ 2967 1126 9A01      		movw r18,r20
+ 2968 1128 281B      		sub r18,r24
+ 2969 112a 390B      		sbc r19,r25
+ 2970 112c C901      		movw r24,r18
+ 2971 112e 2091 0000 		lds r18,right_i
+ 2972 1132 3091 0000 		lds r19,(right_i)+1
+ 2973 1136 820F      		add r24,r18
+ 2974 1138 931F      		adc r25,r19
+ 2975 113a 9093 0000 		sts (right_i)+1,r25
+ 2976 113e 8093 0000 		sts right_i,r24
+ 2977               	.LM583:
+ 2978 1142 855A      		subi r24,lo8(421)
+ 2979 1144 9140      		sbci r25,hi8(421)
+ 2980 1146 04F0      		brlt .L283
+ 2981 1148 84EA      		ldi r24,lo8(420)
+ 2982 114a 91E0      		ldi r25,hi8(420)
+ 2983 114c 9093 0000 		sts (right_i)+1,r25
+ 2984 1150 8093 0000 		sts right_i,r24
+ 2985               	.L283:
+ 2986               	.LM584:
+ 2987 1154 8091 0000 		lds r24,right_i
+ 2988 1158 9091 0000 		lds r25,(right_i)+1
+ 2989 115c 8C55      		subi r24,lo8(-420)
+ 2990 115e 9E4F      		sbci r25,hi8(-420)
+ 2991 1160 04F4      		brge .L284
+ 2992 1162 8CE5      		ldi r24,lo8(-420)
+ 2993 1164 9EEF      		ldi r25,hi8(-420)
+ 2994 1166 9093 0000 		sts (right_i)+1,r25
+ 2995 116a 8093 0000 		sts right_i,r24
+ 2996               	.L284:
+ 2997               	.LM585:
+ 2998 116e 8091 0000 		lds r24,mright_speed
+ 2999 1172 9091 0000 		lds r25,(mright_speed)+1
+ 3000 1176 892B      		or r24,r25
+ 3001 1178 01F4      		brne .L285
+ 3002 117a 452B      		or r20,r21
+ 3003 117c 01F4      		brne .L285
+ 3004               	.LM586:
+ 3005 117e 1092 0000 		sts (right_i)+1,__zero_reg__
+ 3006 1182 1092 0000 		sts right_i,__zero_reg__
+ 3007               	.L285:
+ 3008               	.LM587:
+ 3009 1186 8091 0000 		lds r24,right_i
+ 3010 118a 9091 0000 		lds r25,(right_i)+1
+ 3011 118e 62E0      		ldi r22,lo8(2)
+ 3012 1190 70E0      		ldi r23,hi8(2)
+ 3013 1192 0E94 0000 		call __divmodhi4
+ 3014 1196 7093 0000 		sts (mright_power)+1,r23
+ 3015 119a 6093 0000 		sts mright_power,r22
+ 3016               	.LM588:
+ 3017 119e 633D      		cpi r22,211
+ 3018 11a0 7105      		cpc r23,__zero_reg__
+ 3019 11a2 04F0      		brlt .L286
+ 3020 11a4 82ED      		ldi r24,lo8(210)
+ 3021 11a6 90E0      		ldi r25,hi8(210)
+ 3022 11a8 9093 0000 		sts (mright_power)+1,r25
+ 3023 11ac 8093 0000 		sts mright_power,r24
+ 3024               	.L286:
+ 3025               	.LM589:
+ 3026 11b0 8091 0000 		lds r24,mright_power
+ 3027 11b4 9091 0000 		lds r25,(mright_power)+1
+ 3028 11b8 97FF      		sbrs r25,7
+ 3029 11ba 00C0      		rjmp .L287
+ 3030 11bc 1092 0000 		sts (mright_power)+1,__zero_reg__
+ 3031 11c0 1092 0000 		sts mright_power,__zero_reg__
+ 3032 11c4 00C0      		rjmp .L287
+ 3033               	.L266:
+ 3034               	.LBE91:
+ 3035               	.LM590:
+ 3036 11c6 8150      		subi r24,lo8(-(-1))
+ 3037 11c8 8093 0000 		sts overcurrent_timeout,r24
+ 3038               	.L287:
+ 3039               	.LM591:
+ 3040 11cc 1092 0000 		sts motor_control,__zero_reg__
+ 3041               	.L265:
+ 3042               	.LM592:
+ 3043 11d0 9091 0000 		lds r25,motion_status
+ 3044 11d4 8091 0000 		lds r24,motion_status_tmp
+ 3045 11d8 8917      		cp r24,r25
+ 3046 11da 01F0      		breq .L288
+ 3047               	.LM593:
+ 3048 11dc 9093 0000 		sts motion_status_tmp,r25
+ 3049               	.LM594:
+ 3050 11e0 E091 0000 		lds r30,MOTIONCONTROL_stateChangedHandler
+ 3051 11e4 F091 0000 		lds r31,(MOTIONCONTROL_stateChangedHandler)+1
+ 3052 11e8 0995      		icall
+ 3053               	.L288:
+ 3054 11ea 0895      		ret
+ 3055               	.LFE19:
+ 3057               	.global	task_RP6System
+ 3059               	task_RP6System:
+ 3060               	.LFB50:
+ 3061               	.LM595:
+ 3062               	/* prologue: function */
+ 3063               	/* frame size = 0 */
+ 3064               	.LM596:
+ 3065 11ec 0E94 0000 		call task_ADC
+ 3066               	.LM597:
+ 3067 11f0 0E94 0000 		call task_ACS
+ 3068               	.LM598:
+ 3069 11f4 0E94 0000 		call task_Bumpers
+ 3070               	.LM599:
+ 3071 11f8 0E94 0000 		call task_motionControl
+ 3072               	/* epilogue start */
+ 3073               	.LM600:
+ 3074 11fc 0895      		ret
+ 3075               	.LFE50:
+ 3077               	.global	rotate
+ 3079               	rotate:
+ 3080               	.LFB25:
+ 3081               	.LM601:
+ 3082               	.LVL55:
+ 3083 11fe FF92      		push r15
+ 3084 1200 0F93      		push r16
+ 3085 1202 1F93      		push r17
+ 3086               	/* prologue: function */
+ 3087               	/* frame size = 0 */
+ 3088 1204 182F      		mov r17,r24
+ 3089 1206 062F      		mov r16,r22
+ 3090 1208 F22E      		mov r15,r18
+ 3091               	.LM602:
+ 3092 120a 8091 0000 		lds r24,motion_status
+ 3093               	.LVL56:
+ 3094               	.LM603:
+ 3095 120e 8360      		ori r24,lo8(3)
+ 3096 1210 8093 0000 		sts motion_status,r24
+ 3097               	.LM604:
+ 3098 1214 60E0      		ldi r22,lo8(0)
+ 3099 1216 70E0      		ldi r23,hi8(0)
+ 3100               	.LVL57:
+ 3101 1218 CB01      		movw r24,r22
+ 3102 121a BA01      		movw r22,r20
+ 3103               	.LVL58:
+ 3104 121c 20EB      		ldi r18,lo8(688)
+ 3105 121e 32E0      		ldi r19,hi8(688)
+ 3106 1220 40E0      		ldi r20,hlo8(688)
+ 3107 1222 50E0      		ldi r21,hhi8(688)
+ 3108               	.LVL59:
+ 3109 1224 0E94 0000 		call __mulsi3
+ 3110 1228 24E6      		ldi r18,lo8(100)
+ 3111 122a 30E0      		ldi r19,hi8(100)
+ 3112 122c 40E0      		ldi r20,hlo8(100)
+ 3113 122e 50E0      		ldi r21,hhi8(100)
+ 3114 1230 0E94 0000 		call __udivmodsi4
+ 3115 1234 A901      		movw r20,r18
+ 3116               	.LVL60:
+ 3117               	.LM605:
+ 3118 1236 C901      		movw r24,r18
+ 3119 1238 8456      		subi r24,lo8(-(-100))
+ 3120 123a 9040      		sbci r25,hi8(-(-100))
+ 3121 123c 9093 0000 		sts (preDecelerate_L)+1,r25
+ 3122 1240 8093 0000 		sts preDecelerate_L,r24
+ 3123               	.LM606:
+ 3124 1244 9093 0000 		sts (preDecelerate_R)+1,r25
+ 3125 1248 8093 0000 		sts preDecelerate_R,r24
+ 3126               	.LM607:
+ 3127 124c 3093 0000 		sts (preStop_L)+1,r19
+ 3128 1250 2093 0000 		sts preStop_L,r18
+ 3129               	.LM608:
+ 3130 1254 3093 0000 		sts (preStop_R)+1,r19
+ 3131 1258 2093 0000 		sts preStop_R,r18
+ 3132               	.LM609:
+ 3133 125c 2832      		cpi r18,40
+ 3134 125e 3105      		cpc r19,__zero_reg__
+ 3135 1260 00F4      		brsh .L292
+ 3136               	.LVL61:
+ 3137               	.LM610:
+ 3138 1262 84E1      		ldi r24,lo8(20)
+ 3139 1264 90E0      		ldi r25,hi8(20)
+ 3140 1266 9093 0000 		sts (preStop_L)+1,r25
+ 3141 126a 8093 0000 		sts preStop_L,r24
+ 3142               	.LM611:
+ 3143 126e 9093 0000 		sts (preStop_R)+1,r25
+ 3144 1272 8093 0000 		sts preStop_R,r24
+ 3145               	.LM612:
+ 3146 1276 8AE0      		ldi r24,lo8(10)
+ 3147 1278 90E0      		ldi r25,hi8(10)
+ 3148 127a 9093 0000 		sts (preDecelerate_L)+1,r25
+ 3149 127e 8093 0000 		sts preDecelerate_L,r24
+ 3150               	.LM613:
+ 3151 1282 9093 0000 		sts (preDecelerate_R)+1,r25
+ 3152 1286 8093 0000 		sts preDecelerate_R,r24
+ 3153 128a 48E2      		ldi r20,lo8(40)
+ 3154 128c 50E0      		ldi r21,hi8(40)
+ 3155               	.LVL62:
+ 3156               	.L292:
+ 3157               	.LBB92:
+ 3158               	.LBB93:
+ 3159               	.LM614:
+ 3160 128e 193C      		cpi r17,lo8(-55)
+ 3161 1290 00F0      		brlo .L293
+ 3162 1292 18EC      		ldi r17,lo8(-56)
+ 3163 1294 88EC      		ldi r24,lo8(-56)
+ 3164               	.LVL63:
+ 3165 1296 00C0      		rjmp .L294
+ 3166               	.LVL64:
+ 3167               	.L293:
+ 3168 1298 812F      		mov r24,r17
+ 3169               	.LVL65:
+ 3170               	.L294:
+ 3171               	.LM615:
+ 3172 129a 8093 0000 		sts mleft_des_speed,r24
+ 3173 129e 1092 0000 		sts mleft_des_speed+1,__zero_reg__
+ 3174               	.LM616:
+ 3175 12a2 1093 0000 		sts mright_des_speed,r17
+ 3176 12a6 1092 0000 		sts mright_des_speed+1,__zero_reg__
+ 3177               	.LBE93:
+ 3178               	.LBE92:
+ 3179               	.LBB94:
+ 3180               	.LBB95:
+ 3181               	.LM617:
+ 3182 12aa 0093 0000 		sts drive_dir,r16
+ 3183               	.LM618:
+ 3184 12ae 1092 0000 		sts mleft_des_dir,__zero_reg__
+ 3185 12b2 802F      		mov r24,r16
+ 3186               	.LVL66:
+ 3187 12b4 8150      		subi r24,lo8(-(-1))
+ 3188 12b6 8230      		cpi r24,lo8(2)
+ 3189 12b8 00F4      		brsh .L295
+ 3190 12ba 81E0      		ldi r24,lo8(1)
+ 3191 12bc 8093 0000 		sts mleft_des_dir,r24
+ 3192               	.L295:
+ 3193               	.LM619:
+ 3194 12c0 0130      		cpi r16,lo8(1)
+ 3195 12c2 01F0      		breq .L304
+ 3196               	.L296:
+ 3197 12c4 80E0      		ldi r24,lo8(0)
+ 3198 12c6 90E0      		ldi r25,hi8(0)
+ 3199 12c8 0330      		cpi r16,lo8(3)
+ 3200 12ca 01F4      		brne .L297
+ 3201               	.L304:
+ 3202 12cc 81E0      		ldi r24,lo8(1)
+ 3203 12ce 90E0      		ldi r25,hi8(1)
+ 3204               	.L297:
+ 3205 12d0 8093 0000 		sts mright_des_dir,r24
+ 3206               	.LBE95:
+ 3207               	.LBE94:
+ 3208               	.LM620:
+ 3209 12d4 1092 0000 		sts (mleft_dist)+1,__zero_reg__
+ 3210 12d8 1092 0000 		sts mleft_dist,__zero_reg__
+ 3211               	.LM621:
+ 3212 12dc 1092 0000 		sts (mright_dist)+1,__zero_reg__
+ 3213 12e0 1092 0000 		sts mright_dist,__zero_reg__
+ 3214               	.LM622:
+ 3215 12e4 5093 0000 		sts (distanceToMove_L)+1,r21
+ 3216 12e8 4093 0000 		sts distanceToMove_L,r20
+ 3217               	.LM623:
+ 3218 12ec 5093 0000 		sts (distanceToMove_R)+1,r21
+ 3219 12f0 4093 0000 		sts distanceToMove_R,r20
+ 3220               	.LM624:
+ 3221 12f4 8091 0000 		lds r24,motion_status
+ 3222 12f8 8093 0000 		sts motion_status_tmp,r24
+ 3223               	.LM625:
+ 3224 12fc E091 0000 		lds r30,MOTIONCONTROL_stateChangedHandler
+ 3225 1300 F091 0000 		lds r31,(MOTIONCONTROL_stateChangedHandler)+1
+ 3226 1304 0995      		icall
+ 3227               	.LVL67:
+ 3228               	.LM626:
+ 3229 1306 FF20      		tst r15
+ 3230 1308 01F4      		brne .L303
+ 3231 130a 00C0      		rjmp .L302
+ 3232               	.L301:
+ 3233               	.LM627:
+ 3234 130c 0E94 0000 		call task_RP6System
+ 3235               	.L303:
+ 3236               	.LM628:
+ 3237 1310 8091 0000 		lds r24,motion_status
+ 3238 1314 8370      		andi r24,lo8(3)
+ 3239 1316 01F4      		brne .L301
+ 3240               	.L302:
+ 3241               	/* epilogue start */
+ 3242               	.LM629:
+ 3243 1318 1F91      		pop r17
+ 3244               	.LVL68:
+ 3245 131a 0F91      		pop r16
+ 3246               	.LVL69:
+ 3247 131c FF90      		pop r15
+ 3248               	.LVL70:
+ 3249 131e 0895      		ret
+ 3250               	.LFE25:
+ 3252               	.global	move
+ 3254               	move:
+ 3255               	.LFB24:
+ 3256               	.LM630:
+ 3257               	.LVL71:
+ 3258 1320 1F93      		push r17
+ 3259               	/* prologue: function */
+ 3260               	/* frame size = 0 */
+ 3261 1322 382F      		mov r19,r24
+ 3262 1324 122F      		mov r17,r18
+ 3263               	.LM631:
+ 3264 1326 8091 0000 		lds r24,motion_status
+ 3265               	.LVL72:
+ 3266               	.LM632:
+ 3267 132a 8360      		ori r24,lo8(3)
+ 3268 132c 8093 0000 		sts motion_status,r24
+ 3269               	.LM633:
+ 3270 1330 1092 0000 		sts (preDecelerate_L)+1,__zero_reg__
+ 3271 1334 1092 0000 		sts preDecelerate_L,__zero_reg__
+ 3272               	.LM634:
+ 3273 1338 1092 0000 		sts (preDecelerate_R)+1,__zero_reg__
+ 3274 133c 1092 0000 		sts preDecelerate_R,__zero_reg__
+ 3275               	.LM635:
+ 3276 1340 3731      		cpi r19,lo8(23)
+ 3277 1342 00F0      		brlo .L306
+ 3278               	.LVL73:
+ 3279               	.LM636:
+ 3280 1344 86EF      		ldi r24,lo8(-10)
+ 3281 1346 9FEF      		ldi r25,hi8(-10)
+ 3282 1348 831B      		sub r24,r19
+ 3283 134a 9109      		sbc r25,__zero_reg__
+ 3284 134c 880F      		lsl r24
+ 3285 134e 991F      		rol r25
+ 3286 1350 840F      		add r24,r20
+ 3287 1352 951F      		adc r25,r21
+ 3288 1354 9093 0000 		sts (preDecelerate_L)+1,r25
+ 3289 1358 8093 0000 		sts preDecelerate_L,r24
+ 3290               	.LM637:
+ 3291 135c 9093 0000 		sts (preDecelerate_R)+1,r25
+ 3292 1360 8093 0000 		sts preDecelerate_R,r24
+ 3293               	.L306:
+ 3294               	.LM638:
+ 3295 1364 CA01      		movw r24,r20
+ 3296 1366 0297      		sbiw r24,2
+ 3297 1368 9093 0000 		sts (preStop_L)+1,r25
+ 3298 136c 8093 0000 		sts preStop_L,r24
+ 3299               	.LM639:
+ 3300 1370 9093 0000 		sts (preStop_R)+1,r25
+ 3301 1374 8093 0000 		sts preStop_R,r24
+ 3302               	.LM640:
+ 3303 1378 4832      		cpi r20,40
+ 3304 137a 5105      		cpc r21,__zero_reg__
+ 3305 137c 00F4      		brsh .L307
+ 3306               	.LM641:
+ 3307 137e 84E1      		ldi r24,lo8(20)
+ 3308 1380 90E0      		ldi r25,hi8(20)
+ 3309 1382 9093 0000 		sts (preStop_L)+1,r25
+ 3310 1386 8093 0000 		sts preStop_L,r24
+ 3311               	.LM642:
+ 3312 138a 9093 0000 		sts (preStop_R)+1,r25
+ 3313 138e 8093 0000 		sts preStop_R,r24
+ 3314               	.LM643:
+ 3315 1392 8AE0      		ldi r24,lo8(10)
+ 3316 1394 90E0      		ldi r25,hi8(10)
+ 3317 1396 9093 0000 		sts (preDecelerate_L)+1,r25
+ 3318 139a 8093 0000 		sts preDecelerate_L,r24
+ 3319               	.LM644:
+ 3320 139e 9093 0000 		sts (preDecelerate_R)+1,r25
+ 3321 13a2 8093 0000 		sts preDecelerate_R,r24
+ 3322 13a6 48E2      		ldi r20,lo8(40)
+ 3323 13a8 50E0      		ldi r21,hi8(40)
+ 3324               	.LVL74:
+ 3325 13aa 00C0      		rjmp .L308
+ 3326               	.L307:
+ 3327               	.LM645:
+ 3328 13ac 21E0      		ldi r18,hi8(400)
+ 3329 13ae 4039      		cpi r20,lo8(400)
+ 3330 13b0 5207      		cpc r21,r18
+ 3331 13b2 00F4      		brsh .L309
+ 3332               	.LVL75:
+ 3333               	.L308:
+ 3334 13b4 3932      		cpi r19,lo8(41)
+ 3335 13b6 00F0      		brlo .L309
+ 3336               	.LM646:
+ 3337 13b8 CA01      		movw r24,r20
+ 3338 13ba 9695      		lsr r25
+ 3339 13bc 8795      		ror r24
+ 3340 13be 9695      		lsr r25
+ 3341 13c0 8795      		ror r24
+ 3342 13c2 9A01      		movw r18,r20
+ 3343 13c4 281B      		sub r18,r24
+ 3344 13c6 390B      		sbc r19,r25
+ 3345 13c8 3093 0000 		sts (preDecelerate_L)+1,r19
+ 3346 13cc 2093 0000 		sts preDecelerate_L,r18
+ 3347               	.LM647:
+ 3348 13d0 3093 0000 		sts (preDecelerate_R)+1,r19
+ 3349 13d4 2093 0000 		sts preDecelerate_R,r18
+ 3350 13d8 38E2      		ldi r19,lo8(40)
+ 3351               	.LVL76:
+ 3352               	.L309:
+ 3353               	.LM648:
+ 3354 13da 1092 0000 		sts (mleft_dist)+1,__zero_reg__
+ 3355 13de 1092 0000 		sts mleft_dist,__zero_reg__
+ 3356               	.LM649:
+ 3357 13e2 1092 0000 		sts (mright_dist)+1,__zero_reg__
+ 3358 13e6 1092 0000 		sts mright_dist,__zero_reg__
+ 3359               	.LBB96:
+ 3360               	.LBB97:
+ 3361               	.LM650:
+ 3362 13ea 393C      		cpi r19,lo8(-55)
+ 3363 13ec 00F0      		brlo .L310
+ 3364 13ee 38EC      		ldi r19,lo8(-56)
+ 3365 13f0 88EC      		ldi r24,lo8(-56)
+ 3366               	.LVL77:
+ 3367 13f2 00C0      		rjmp .L311
+ 3368               	.LVL78:
+ 3369               	.L310:
+ 3370 13f4 832F      		mov r24,r19
+ 3371               	.LVL79:
+ 3372               	.L311:
+ 3373               	.LM651:
+ 3374 13f6 8093 0000 		sts mleft_des_speed,r24
+ 3375 13fa 1092 0000 		sts mleft_des_speed+1,__zero_reg__
+ 3376               	.LM652:
+ 3377 13fe 3093 0000 		sts mright_des_speed,r19
+ 3378 1402 1092 0000 		sts mright_des_speed+1,__zero_reg__
+ 3379               	.LBE97:
+ 3380               	.LBE96:
+ 3381               	.LBB98:
+ 3382               	.LBB99:
+ 3383               	.LM653:
+ 3384 1406 6093 0000 		sts drive_dir,r22
+ 3385               	.LM654:
+ 3386 140a 1092 0000 		sts mleft_des_dir,__zero_reg__
+ 3387 140e 862F      		mov r24,r22
+ 3388               	.LVL80:
+ 3389 1410 8150      		subi r24,lo8(-(-1))
+ 3390 1412 8230      		cpi r24,lo8(2)
+ 3391 1414 00F4      		brsh .L312
+ 3392 1416 81E0      		ldi r24,lo8(1)
+ 3393 1418 8093 0000 		sts mleft_des_dir,r24
+ 3394               	.L312:
+ 3395               	.LM655:
+ 3396 141c 6130      		cpi r22,lo8(1)
+ 3397 141e 01F0      		breq .L321
+ 3398               	.L313:
+ 3399 1420 80E0      		ldi r24,lo8(0)
+ 3400 1422 90E0      		ldi r25,hi8(0)
+ 3401 1424 6330      		cpi r22,lo8(3)
+ 3402 1426 01F4      		brne .L314
+ 3403               	.L321:
+ 3404 1428 81E0      		ldi r24,lo8(1)
+ 3405 142a 90E0      		ldi r25,hi8(1)
+ 3406               	.L314:
+ 3407 142c 8093 0000 		sts mright_des_dir,r24
+ 3408               	.LBE99:
+ 3409               	.LBE98:
+ 3410               	.LM656:
+ 3411 1430 5093 0000 		sts (distanceToMove_L)+1,r21
+ 3412 1434 4093 0000 		sts distanceToMove_L,r20
+ 3413               	.LM657:
+ 3414 1438 5093 0000 		sts (distanceToMove_R)+1,r21
+ 3415 143c 4093 0000 		sts distanceToMove_R,r20
+ 3416               	.LM658:
+ 3417 1440 8091 0000 		lds r24,motion_status
+ 3418 1444 8093 0000 		sts motion_status_tmp,r24
+ 3419               	.LM659:
+ 3420 1448 E091 0000 		lds r30,MOTIONCONTROL_stateChangedHandler
+ 3421 144c F091 0000 		lds r31,(MOTIONCONTROL_stateChangedHandler)+1
+ 3422 1450 0995      		icall
+ 3423               	.LVL81:
+ 3424               	.LM660:
+ 3425 1452 1123      		tst r17
+ 3426 1454 01F4      		brne .L320
+ 3427 1456 00C0      		rjmp .L319
+ 3428               	.L318:
+ 3429               	.LM661:
+ 3430 1458 0E94 0000 		call task_RP6System
+ 3431               	.L320:
+ 3432               	.LM662:
+ 3433 145c 8091 0000 		lds r24,motion_status
+ 3434 1460 8370      		andi r24,lo8(3)
+ 3435 1462 01F4      		brne .L318
+ 3436               	.L319:
+ 3437               	/* epilogue start */
+ 3438               	.LM663:
+ 3439 1464 1F91      		pop r17
+ 3440               	.LVL82:
+ 3441 1466 0895      		ret
+ 3442               	.LFE24:
+ 3444               	.global	mleft_des_dir
+ 3445               	.global	mleft_des_dir
+ 3446               		.section .bss
+ 3449               	mleft_des_dir:
+ 3450 0000 00        		.skip 1,0
+ 3451               	.global	mright_des_dir
+ 3452               	.global	mright_des_dir
+ 3455               	mright_des_dir:
+ 3456 0001 00        		.skip 1,0
+ 3457               	.global	mleft_dir
+ 3458               	.global	mleft_dir
+ 3461               	mleft_dir:
+ 3462 0002 00        		.skip 1,0
+ 3463               	.global	mright_dir
+ 3464               	.global	mright_dir
+ 3467               	mright_dir:
+ 3468 0003 00        		.skip 1,0
+ 3469               	.global	drive_dir
+ 3470               	.global	drive_dir
+ 3473               	drive_dir:
+ 3474 0004 00        		.skip 1,0
+ 3475               	.global	acs_state
+ 3476               		.data
+ 3479               	acs_state:
+ 3480 0000 01        		.byte	1
+ 3481               		.lcomm IRCOMM_RC5_tmp.2544,2
+ 3482               		.lcomm IRCOMM_RC5_time.2543,1
+ 3483               		.lcomm IRCOMM_RC5_bit.2542,1
+ 3484               		.lcomm leds_on_timer.2541,2
+ 3487               	IRCOMM_RC5dataReadyHandler:
+ 3488 0001 0000      		.word	gs(IRCOMM_RC5dataReady_DUMMY)
+ 3491               	ACS_stateChangedHandler:
+ 3492 0003 0000      		.word	gs(ACS_stateChanged_DUMMY)
+ 3493               		.lcomm acs_r_tmp.2316,1
+ 3494               		.lcomm acs_l_tmp.2315,1
+ 3495               		.lcomm acs_detect_timeout.2307,2
+ 3496               		.lcomm acs_counter.2306,1
+ 3497               		.lcomm ircomm_pulse.2225,1
+ 3500               	MOTIONCONTROL_stateChangedHandler:
+ 3501 0005 0000      		.word	gs(MOTIONCONTROL_stateChanged_DUMMY)
+ 3502               		.section	.progmem.data,"a",@progbits
+ 3505               	__c.2008:
+ 3506 0000 5468 6520 		.string	"The Robot needs to be resetted now.\n\n"
+ 3506      526F 626F 
+ 3506      7420 6E65 
+ 3506      6564 7320 
+ 3506      746F 2062 
+ 3509               	__c.2006:
+ 3510 0026 596F 7520 		.string	"You need to check Motor assembly (or your software).\n\n"
+ 3510      6E65 6564 
+ 3510      2074 6F20 
+ 3510      6368 6563 
+ 3510      6B20 4D6F 
+ 3513               	__c.2004:
+ 3514 005d 0A0A 2873 		.string	"\n\n(s. task_motorControl() function in RP6Lib!)\n"
+ 3514      2E20 7461 
+ 3514      736B 5F6D 
+ 3514      6F74 6F72 
+ 3514      436F 6E74 
+ 3517               	__c.2002:
+ 3518 008d 0A0A 2323 		.string	"\n\n### MOTOR OVERCURRENT ###\n"
+ 3518      2320 4D4F 
+ 3518      544F 5220 
+ 3518      4F56 4552 
+ 3518      4355 5252 
+ 3521               	__c.2000:
+ 3522 00aa 596F 7520 		.string	"You need to check Encoder/Motor assembly (or your software).\n\n"
+ 3522      6E65 6564 
+ 3522      2074 6F20 
+ 3522      6368 6563 
+ 3522      6B20 456E 
+ 3525               	__c.1998:
+ 3526 00e9 210A 0A28 		.string	"!\n\n(s. task_motorControl() function in RP6Lib!)\n"
+ 3526      732E 2074 
+ 3526      6173 6B5F 
+ 3526      6D6F 746F 
+ 3526      7243 6F6E 
+ 3529               	__c.1996:
+ 3530 011a 5249 4748 		.string	"RIGHT"
+ 3530      5400 
+ 3533               	__c.1994:
+ 3534 0120 4C45 4654 		.string	"LEFT"
+ 3534      00
+ 3537               	__c.1992:
+ 3538 0125 4166 6665 		.string	"Affected channel:"
+ 3538      6374 6564 
+ 3538      2063 6861 
+ 3538      6E6E 656C 
+ 3538      3A00 
+ 3541               	__c.1990:
+ 3542 0137 0A23 2323 		.string	"\n### ENCODER (OR MOTOR) MALFUNCTION! ###\n"
+ 3542      2045 4E43 
+ 3542      4F44 4552 
+ 3542      2028 4F52 
+ 3542      204D 4F54 
+ 3545               	__c.1988:
+ 3546 0161 2323 2323 		.string	"##### ALL OPERATIONS STOPPED TO PREVENT ANY DAMAGE! #####\n"
+ 3546      2320 414C 
+ 3546      4C20 4F50 
+ 3546      4552 4154 
+ 3546      494F 4E53 
+ 3549               	__c.1986:
+ 3550 019c 0A0A 2323 		.string	"\n\n##### EMERGENCY SHUTDOWN #####\n"
+ 3550      2323 2320 
+ 3550      454D 4552 
+ 3550      4745 4E43 
+ 3550      5920 5348 
+ 3551               		.lcomm current_adc_channel.1898,1
+ 3552               		.data
+ 3555               	BUMPERS_stateChangedHandler:
+ 3556 0007 0000      		.word	gs(BUMPERS_stateChanged_DUMMY)
+ 3557               		.comm statusLEDs,1,1
+ 3558               		.comm bumper_left,1,1
+ 3559               		.comm bumper_right,1,1
+ 3560               		.comm adcBat,2,1
+ 3561               		.comm adcMotorCurrentLeft,2,1
+ 3562               		.comm adcMotorCurrentRight,2,1
+ 3563               		.comm adcLSL,2,1
+ 3564               		.comm adcLSR,2,1
+ 3565               		.comm adc0,2,1
+ 3566               		.comm adc1,2,1
+ 3567               		.comm motion_status,1,1
+ 3568               		.comm mleft_power,2,1
+ 3569               		.comm mright_power,2,1
+ 3570               		.comm mleft_speed,2,1
+ 3571               		.comm mright_speed,2,1
+ 3572               		.comm mleft_dist,2,1
+ 3573               		.comm mright_dist,2,1
+ 3574               		.comm mleft_des_speed,2,1
+ 3575               		.comm mright_des_speed,2,1
+ 3576               		.comm obstacle_left,1,1
+ 3577               		.comm obstacle_right,1,1
+ 3578               		.comm stopwatches,17,1
+ 3579               		.comm timer,2,1
+ 3580               		.comm leds_on,1,1
+ 3581               		.comm bumper_timer,1,1
+ 3582               		.comm speed_timer,1,1
+ 3583               		.comm mleft_counter,2,1
+ 3584               		.comm mright_counter,2,1
+ 3585               		.comm right_i,2,1
+ 3586               		.comm left_i,2,1
+ 3587               		.comm mleft_ptmp,1,1
+ 3588               		.comm mright_ptmp,1,1
+ 3589               		.comm mleft_des_speed_tmp,2,1
+ 3590               		.comm mright_des_speed_tmp,2,1
+ 3591               		.comm overcurrent_timeout,1,1
+ 3592               		.comm overcurrent_timer,1,1
+ 3593               		.comm overcurrent_errors,1,1
+ 3594               		.comm overcurrent_error_clear,1,1
+ 3595               		.comm motion_status_tmp,1,1
+ 3596               		.comm distanceToMove_L,2,1
+ 3597               		.comm distanceToMove_R,2,1
+ 3598               		.comm preDecelerate_L,2,1
+ 3599               		.comm preDecelerate_R,2,1
+ 3600               		.comm preStop_L,2,1
+ 3601               		.comm preStop_R,2,1
+ 3602               		.comm motor_control,1,1
+ 3603               		.comm acs_timer,2,1
+ 3604               		.comm acs_pulse,1,1
+ 3605               		.comm acs_event_counter,1,1
+ 3606               		.comm sysStatACS,1,1
+ 3607               		.comm ircomm_send,1,1
+ 3608               		.comm ircomm_data,2,1
+ 3609               		.comm ircomm_data_tmp,2,1
+ 3610               		.comm IRCOMM_RC5_data_ok,2,1
+ 3611               		.comm IRCOMM_RC5_data,2,1
+ 3612               		.comm delay_timer,1,1
+ 3613               		.comm ms_timer,1,1
+ 3614               		.comm speed_adjust_timer,1,1
+ 4031               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 RP6RobotBaseLib.c
+     /tmp/cchAYRvZ.s:2      *ABS*:000000000000003f __SREG__
+     /tmp/cchAYRvZ.s:3      *ABS*:000000000000003e __SP_H__
+     /tmp/cchAYRvZ.s:4      *ABS*:000000000000003d __SP_L__
+     /tmp/cchAYRvZ.s:5      *ABS*:0000000000000034 __CCP__
+     /tmp/cchAYRvZ.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/cchAYRvZ.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/cchAYRvZ.s:20     .text:0000000000000000 enablePowerOnWarning
+                            *COM*:0000000000000001 leds_on
+     /tmp/cchAYRvZ.s:37     .text:000000000000000e disablePowerOnWarning
+     /tmp/cchAYRvZ.s:52     .text:0000000000000016 updateStatusLEDs
+                            *COM*:0000000000000001 statusLEDs
+     /tmp/cchAYRvZ.s:121    .text:0000000000000076 setLEDs
+     /tmp/cchAYRvZ.s:139    .text:0000000000000080 getBumperLeft
+     /tmp/cchAYRvZ.s:175    .text:000000000000009a getBumperRight
+     /tmp/cchAYRvZ.s:211    .text:00000000000000b4 BUMPERS_stateChanged_DUMMY
+     /tmp/cchAYRvZ.s:223    .text:00000000000000b6 BUMPERS_setStateChangedHandler
+     /tmp/cchAYRvZ.s:3555   .data:0000000000000007 BUMPERS_stateChangedHandler
+     /tmp/cchAYRvZ.s:239    .text:00000000000000c0 task_Bumpers
+                            *COM*:0000000000000001 bumper_timer
+                            *COM*:0000000000000001 bumper_left
+                            *COM*:0000000000000001 bumper_right
+     /tmp/cchAYRvZ.s:289    .text:0000000000000100 readADC
+     /tmp/cchAYRvZ.s:330    .text:0000000000000120 startADC
+     /tmp/cchAYRvZ.s:350    .text:000000000000012a task_ADC
+     /tmp/cchAYRvZ.s:3497   .bss:0000000000000011 current_adc_channel.1898
+                            *COM*:0000000000000002 adcBat
+                            *COM*:0000000000000002 adcMotorCurrentLeft
+                            *COM*:0000000000000002 adcMotorCurrentRight
+                            *COM*:0000000000000002 adcLSL
+                            *COM*:0000000000000002 adcLSR
+                            *COM*:0000000000000002 adc0
+                            *COM*:0000000000000002 adc1
+     /tmp/cchAYRvZ.s:490    .text:00000000000001dc __vector_1
+                            *COM*:0000000000000002 mleft_dist
+                            *COM*:0000000000000002 mleft_counter
+     /tmp/cchAYRvZ.s:527    .text:000000000000021c __vector_2
+                            *COM*:0000000000000002 mright_dist
+                            *COM*:0000000000000002 mright_counter
+     /tmp/cchAYRvZ.s:564    .text:000000000000025c MOTIONCONTROL_stateChanged_DUMMY
+     /tmp/cchAYRvZ.s:576    .text:000000000000025e MOTIONCONTROL_setStateChangedHandler
+     /tmp/cchAYRvZ.s:3500   .data:0000000000000005 MOTIONCONTROL_stateChangedHandler
+     /tmp/cchAYRvZ.s:592    .text:0000000000000268 moveAtSpeed
+                            *COM*:0000000000000002 mleft_des_speed
+                            *COM*:0000000000000002 mright_des_speed
+     /tmp/cchAYRvZ.s:621    .text:0000000000000286 changeDirection
+     /tmp/cchAYRvZ.s:3473   .bss:0000000000000004 drive_dir
+     /tmp/cchAYRvZ.s:3449   .bss:0000000000000000 mleft_des_dir
+     /tmp/cchAYRvZ.s:3455   .bss:0000000000000001 mright_des_dir
+     /tmp/cchAYRvZ.s:659    .text:00000000000002b2 isMovementComplete
+                            *COM*:0000000000000001 motion_status
+     /tmp/cchAYRvZ.s:679    .text:00000000000002c2 stop
+                            *COM*:0000000000000002 left_i
+                            *COM*:0000000000000002 right_i
+                            *COM*:0000000000000001 motion_status_tmp
+     /tmp/cchAYRvZ.s:714    .text:00000000000002fc setMotorPower
+                            *COM*:0000000000000002 mright_power
+                            *COM*:0000000000000002 mleft_power
+     /tmp/cchAYRvZ.s:743    .text:000000000000031a setMotorDir
+     /tmp/cchAYRvZ.s:3461   .bss:0000000000000002 mleft_dir
+     /tmp/cchAYRvZ.s:3467   .bss:0000000000000003 mright_dir
+     /tmp/cchAYRvZ.s:781    .text:0000000000000340 IRCOMM_sendRC5
+                            *COM*:0000000000000001 ircomm_send
+                            *COM*:0000000000000002 ircomm_data_tmp
+                            *COM*:0000000000000001 sysStatACS
+     /tmp/cchAYRvZ.s:838    .text:0000000000000386 __vector_4
+     /tmp/cchAYRvZ.s:3479   .data:0000000000000000 acs_state
+     /tmp/cchAYRvZ.s:3496   .bss:0000000000000010 ircomm_pulse.2225
+                            *COM*:0000000000000002 ircomm_data
+                            *COM*:0000000000000001 acs_pulse
+     /tmp/cchAYRvZ.s:960    .text:000000000000044a __vector_3
+                            *COM*:0000000000000001 acs_event_counter
+     /tmp/cchAYRvZ.s:1008   .text:0000000000000494 IRCOMM_RC5dataReady_DUMMY
+     /tmp/cchAYRvZ.s:1021   .text:0000000000000496 IRCOMM_setRC5DataReadyHandler
+     /tmp/cchAYRvZ.s:3487   .data:0000000000000001 IRCOMM_RC5dataReadyHandler
+     /tmp/cchAYRvZ.s:1037   .text:00000000000004a0 ACS_stateChanged_DUMMY
+     /tmp/cchAYRvZ.s:1049   .text:00000000000004a2 ACS_setStateChangedHandler
+     /tmp/cchAYRvZ.s:3491   .data:0000000000000003 ACS_stateChangedHandler
+     /tmp/cchAYRvZ.s:1065   .text:00000000000004ac task_ACS
+                            *COM*:0000000000000002 acs_timer
+     /tmp/cchAYRvZ.s:3495   .bss:000000000000000f acs_counter.2306
+                            *COM*:0000000000000002 IRCOMM_RC5_data_ok
+                            *COM*:0000000000000002 IRCOMM_RC5_data
+     /tmp/cchAYRvZ.s:3494   .bss:000000000000000d acs_detect_timeout.2307
+                            *COM*:0000000000000001 obstacle_left
+                            *COM*:0000000000000001 obstacle_right
+     /tmp/cchAYRvZ.s:3493   .bss:000000000000000c acs_l_tmp.2315
+     /tmp/cchAYRvZ.s:3484   .bss:000000000000000b acs_r_tmp.2316
+     /tmp/cchAYRvZ.s:1418   .text:0000000000000732 disableACS
+     /tmp/cchAYRvZ.s:1446   .text:000000000000074c enableACS
+     /tmp/cchAYRvZ.s:1475   .text:0000000000000768 setACSPwrOff
+     /tmp/cchAYRvZ.s:1499   .text:0000000000000776 setACSPwrLow
+     /tmp/cchAYRvZ.s:1519   .text:0000000000000780 setACSPwrMed
+     /tmp/cchAYRvZ.s:1539   .text:000000000000078a setACSPwrHigh
+     /tmp/cchAYRvZ.s:1559   .text:0000000000000794 powerON
+     /tmp/cchAYRvZ.s:1579   .text:00000000000007a6 powerOFF
+     /tmp/cchAYRvZ.s:1610   .text:00000000000007ca __vector_10
+                            *COM*:0000000000000002 timer
+                            *COM*:0000000000000001 delay_timer
+                            *COM*:0000000000000001 ms_timer
+                            *COM*:0000000000000011 stopwatches
+                            *COM*:0000000000000001 speed_timer
+                            *COM*:0000000000000002 mright_speed
+                            *COM*:0000000000000002 mleft_speed
+                            *COM*:0000000000000001 motor_control
+     /tmp/cchAYRvZ.s:3483   .bss:0000000000000009 leds_on_timer.2541
+                            *COM*:0000000000000001 overcurrent_timer
+                            *COM*:0000000000000001 speed_adjust_timer
+                            *COM*:0000000000000001 mright_ptmp
+                            *COM*:0000000000000001 mleft_ptmp
+                             .bss:0000000000000005 IRCOMM_RC5_tmp.2544
+     /tmp/cchAYRvZ.s:3481   .bss:0000000000000007 IRCOMM_RC5_time.2543
+     /tmp/cchAYRvZ.s:3482   .bss:0000000000000008 IRCOMM_RC5_bit.2542
+     /tmp/cchAYRvZ.s:2079   .text:0000000000000b56 sleep
+     /tmp/cchAYRvZ.s:2100   .text:0000000000000b66 mSleep
+     /tmp/cchAYRvZ.s:2135   .text:0000000000000b82 delayCycles
+     /tmp/cchAYRvZ.s:2162   .text:0000000000000b8e extIntON
+     /tmp/cchAYRvZ.s:2178   .text:0000000000000b94 extIntOFF
+     /tmp/cchAYRvZ.s:2194   .text:0000000000000b9a initRobotBase
+     /tmp/cchAYRvZ.s:2322   .text:0000000000000c2e emergencyShutdown
+     /tmp/cchAYRvZ.s:3549   .progmem.data:000000000000019c __c.1986
+     /tmp/cchAYRvZ.s:3545   .progmem.data:0000000000000161 __c.1988
+     /tmp/cchAYRvZ.s:3541   .progmem.data:0000000000000137 __c.1990
+     /tmp/cchAYRvZ.s:3537   .progmem.data:0000000000000125 __c.1992
+     /tmp/cchAYRvZ.s:3533   .progmem.data:0000000000000120 __c.1994
+     /tmp/cchAYRvZ.s:3529   .progmem.data:000000000000011a __c.1996
+     /tmp/cchAYRvZ.s:3525   .progmem.data:00000000000000e9 __c.1998
+     /tmp/cchAYRvZ.s:3521   .progmem.data:00000000000000aa __c.2000
+     /tmp/cchAYRvZ.s:3517   .progmem.data:000000000000008d __c.2002
+     /tmp/cchAYRvZ.s:3513   .progmem.data:000000000000005d __c.2004
+     /tmp/cchAYRvZ.s:3509   .progmem.data:0000000000000026 __c.2006
+     /tmp/cchAYRvZ.s:3505   .progmem.data:0000000000000000 __c.2008
+     /tmp/cchAYRvZ.s:2547   .text:0000000000000d3e task_motionControl
+                            *COM*:0000000000000001 overcurrent_timeout
+                            *COM*:0000000000000001 overcurrent_errors
+                            *COM*:0000000000000001 overcurrent_error_clear
+                            *COM*:0000000000000002 preStop_R
+                            *COM*:0000000000000002 preDecelerate_R
+                            *COM*:0000000000000002 preStop_L
+                            *COM*:0000000000000002 preDecelerate_L
+                            *COM*:0000000000000002 mleft_des_speed_tmp
+                            *COM*:0000000000000002 mright_des_speed_tmp
+     /tmp/cchAYRvZ.s:3059   .text:00000000000011ec task_RP6System
+     /tmp/cchAYRvZ.s:3079   .text:00000000000011fe rotate
+                            *COM*:0000000000000002 distanceToMove_L
+                            *COM*:0000000000000002 distanceToMove_R
+     /tmp/cchAYRvZ.s:3254   .text:0000000000001320 move
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
+__udivmodhi4
+writeNStringP
+__divmodhi4
+__mulsi3
+__udivmodsi4

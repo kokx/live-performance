@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="CSharpSerialConnection">
+</Property><Property Name="Solution File" Value="C:\Documents and Settings\Administrator\My Documents\fontys\Onderwijs\09N\Assesment_prop\LPA\CSharpSerialConnection2008\CSharpSerialConnection.sln">
+</Property><Property Name="Date" Value="Sunday, January 10, 2010">
+</Property><Property Name="Time" Value="12:31 PM">
+</Property></Properties><Event ErrorLevel="0" Project="CSharpSerialConnection" Source="CSharpSerialConnection\CSharpSerialConnection.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="CSharpSerialConnection" Source="CSharpSerialConnection\CSharpSerialConnection.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="CSharpSerialConnection.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="CSharpSerialConnection.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="CSharpSerialConnection" Source="CSharpSerialConnection\CSharpSerialConnection.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
