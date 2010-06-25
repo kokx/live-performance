@@ -9,6 +9,9 @@
 #include "comm.h"
 #include "hal.h"
 
+// states
+#define STATE_IDLE 0
+
 /*
  * Give the user an elevatorish welcome
  */
@@ -31,7 +34,19 @@ int main(void)
 
     welcome();
 
+    char * message;
+    uint8_t state = STATE_IDLE;
+
     while (true) {
+        switch (state) {
+            case STATE_IDLE:
+                message = receiveMessage();
+                if (message) {
+                    writeString(message);
+                    writeString_P("\n");
+                }
+                break;
+        }
     }
     return 0;
 }
