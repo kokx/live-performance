@@ -1,5 +1,4 @@
 using System;
-using System.IO.Ports;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,60 +10,45 @@ namespace CSharpSerialConnection
 {
     public partial class UserInterface : Form
     {
-        private SerialPort sPort;
+        private Connection connection;
+        private Lift lift;
 
         public UserInterface()
         {
             InitializeComponent();
-            sPort = null;
+
+            connection = new Connection();
+
+            connection.DataReceived += new EventHandler<ConnectionEventArgs>(connection_DataReceived);
+
+            lift = new Lift(connection);
         }
 
-        private void RenesSerialDataReceived(object sender, SerialDataReceivedEventArgs e)
+        void connection_DataReceived(object sender, ConnectionEventArgs e)
         {
+            // we're using invoke, since it looks like this event
+            // will be triggered from another thread
             textBox1.Invoke(
                 new EventHandler(
-                    delegate 
-                    { 
-                        textBox1.Text += sPort.ReadExisting().Replace("\n", "\r\n");
-                        textBox1.Select(textBox1.Text.Length, 0);
+                    delegate
+                    {
+                        textBox1.Text += e.Message;
                     }));
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (sPort == null)
-            {
-                try
-                {
-                    sPort = new SerialPort("COM1", 38400, Parity.None, 8, StopBits.One);
-                    sPort.DataReceived += new SerialDataReceivedEventHandler(RenesSerialDataReceived);
-                    sPort.Open();
-                }
-                catch (System.IO.IOException ex)
-                {
-                    MessageBox.Show("Creation failed");
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            connection.Connect();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (sPort != null)
-            {
-                sPort.Write("Hi");
-                sPort.Write("\n");
-            }
+            connection.Send("test");
         }
 
-        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        private void statusTimer_Tick(object sender, EventArgs e)
         {
-            if (sPort != null)
-            {
-                char[] input = new char[1];
-                input[0] = e.KeyChar;
-                sPort.Write(input, 0, 1);
-            }
+            lift.updateStatus();
         }
     }
 }

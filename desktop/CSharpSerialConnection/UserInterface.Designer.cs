@@ -28,14 +28,16 @@ namespace CSharpSerialConnection
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.ver3 = new System.Windows.Forms.RadioButton();
             this.ver2 = new System.Windows.Forms.RadioButton();
             this.ver1 = new System.Windows.Forms.RadioButton();
             this.ver0 = new System.Windows.Forms.RadioButton();
             this.control = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.statusTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button1
@@ -44,7 +46,7 @@ namespace CSharpSerialConnection
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Open";
+            this.button1.Text = "Connect";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -56,17 +58,6 @@ namespace CSharpSerialConnection
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(344, 256);
             this.textBox1.TabIndex = 1;
-            this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(93, 166);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Hallo";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ver3
             // 
@@ -122,20 +113,34 @@ namespace CSharpSerialConnection
             this.control.Text = "The Devil has control";
             this.control.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(13, 196);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "test";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // statusTimer
+            // 
+            this.statusTimer.Tick += new System.EventHandler(this.statusTimer_Tick);
+            // 
+            // UserInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(544, 284);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.control);
             this.Controls.Add(this.ver0);
             this.Controls.Add(this.ver1);
             this.Controls.Add(this.ver2);
             this.Controls.Add(this.ver3);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
-            this.Name = "Form1";
+            this.Name = "UserInterface";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -146,12 +151,13 @@ namespace CSharpSerialConnection
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.RadioButton ver3;
         private System.Windows.Forms.RadioButton ver2;
         private System.Windows.Forms.RadioButton ver1;
         private System.Windows.Forms.RadioButton ver0;
         private System.Windows.Forms.CheckBox control;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer statusTimer;
     }
 }
 
