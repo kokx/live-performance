@@ -1,0 +1,10 @@
+*.sw?
+*.[oa]
+*.lst
+tags
+*.dep/
+*.elf
+*.hex
+*.lss
+*.map
+*.sym
