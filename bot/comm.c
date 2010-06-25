@@ -33,3 +33,8 @@ char * receiveMessage(void)
     }
     return NULL;
 }
+
+void sendMessage(char *message)
+{
+    writeString(message);
+}

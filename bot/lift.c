@@ -111,7 +111,7 @@ int main(void)
         message = receiveMessage();
         parseCommand(message);
 
-        //checkButtons();
+        checkButtons();
     }
     return 0;
 }

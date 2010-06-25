@@ -31,3 +31,23 @@ void showStatus(uint8_t verdieping, uint16_t hoogte, uint8_t motor)
     setCursorPosLCD(1, 15);
     writeIntegerLCD(verdieping, DEC);
 }
+
+uint8_t pressed = false;
+
+void checkButtons(void)
+{
+    uint8_t key = getPressedKeyNumber();
+
+    char message[10];
+
+    if (key && key < 5) {
+        if (!pressed) {
+            sprintf(message, "1-%d", key - 1);
+            sendMessage(message);
+
+            pressed = true;
+        }
+    } else {
+        pressed = false;
+    }
+}
