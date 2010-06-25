@@ -21,19 +21,44 @@ namespace CSharpSerialConnection
     {
         private Connection connection;
 
-        private int verdieping = 2;
-        private int hoogte = 100;
-        private MotorState motor = MotorState.LEFT;
+        private int verdieping = 0;
+        private int hoogte = 0;
+        private MotorState motor = MotorState.IDLE;
         private LiftMode modus = LiftMode.USER;
+
+        public int Verdieping
+        {
+            get
+            {
+                return Convert.ToInt32(Math.Round(hoogte / 260f));
+            }
+        }
 
         public Lift(Connection connection)
         {
             this.connection = connection;
+
+            connection.DataReceived += new EventHandler<ConnectionEventArgs>(connection_DataReceived);
         }
 
-        public bool gaNaarVerdieping(int verdieping)
+        void connection_DataReceived(object sender, ConnectionEventArgs e)
         {
-            throw new NotImplementedException();
+            string message = e.Message;
+
+            if (message.StartsWith("1-")) {
+                message = message.Remove(0, 2);
+
+                this.verdieping = Convert.ToInt32(message);
+            }
+        }
+
+        public bool GaNaarVerdieping(int verdieping)
+        {
+            if (modus == LiftMode.OPERATOR) {
+                this.verdieping = verdieping;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -54,9 +79,16 @@ namespace CSharpSerialConnection
         /// </summary>
         public void updateStatus()
         {
-            int[] data = new int[3] ;
+            // update de hoogte als we aan het verhogen/verlagen zijn
+            if (hoogte > verdieping * 260) {
+                hoogte -= 2;
+            } else if (hoogte < verdieping * 260) {
+                hoogte += 2;
+            }
 
-            data[0] = verdieping;
+            int[] data = new int[3];
+
+            data[0] = Verdieping;
             data[1] = hoogte;
 
             switch (motor) {

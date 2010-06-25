@@ -62,6 +62,7 @@ namespace CSharpSerialConnection
             // ver3
             // 
             this.ver3.AutoSize = true;
+            this.ver3.Enabled = false;
             this.ver3.Location = new System.Drawing.Point(12, 12);
             this.ver3.Name = "ver3";
             this.ver3.Size = new System.Drawing.Size(89, 17);
@@ -73,28 +74,30 @@ namespace CSharpSerialConnection
             // ver2
             // 
             this.ver2.AutoSize = true;
+            this.ver2.Enabled = false;
             this.ver2.Location = new System.Drawing.Point(12, 35);
             this.ver2.Name = "ver2";
             this.ver2.Size = new System.Drawing.Size(89, 17);
             this.ver2.TabIndex = 4;
-            this.ver2.TabStop = true;
             this.ver2.Text = "2e verdieping";
             this.ver2.UseVisualStyleBackColor = true;
             // 
             // ver1
             // 
             this.ver1.AutoSize = true;
+            this.ver1.Enabled = false;
             this.ver1.Location = new System.Drawing.Point(12, 58);
             this.ver1.Name = "ver1";
             this.ver1.Size = new System.Drawing.Size(89, 17);
             this.ver1.TabIndex = 5;
-            this.ver1.TabStop = true;
             this.ver1.Text = "1e verdieping";
             this.ver1.UseVisualStyleBackColor = true;
             // 
             // ver0
             // 
             this.ver0.AutoSize = true;
+            this.ver0.Checked = true;
+            this.ver0.Enabled = false;
             this.ver0.Location = new System.Drawing.Point(12, 81);
             this.ver0.Name = "ver0";
             this.ver0.Size = new System.Drawing.Size(94, 17);
