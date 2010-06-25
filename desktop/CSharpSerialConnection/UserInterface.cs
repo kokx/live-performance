@@ -39,6 +39,8 @@ namespace CSharpSerialConnection
         private void button1_Click(object sender, EventArgs e)
         {
             connection.Connect();
+
+            statusTimer.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)

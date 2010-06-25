@@ -21,9 +21,9 @@ namespace CSharpSerialConnection
     {
         private Connection connection;
 
-        private int verdieping = 0;
-        private int hoogte = 0;
-        private MotorState motor = MotorState.IDLE;
+        private int verdieping = 2;
+        private int hoogte = 100;
+        private MotorState motor = MotorState.LEFT;
         private LiftMode modus = LiftMode.USER;
 
         public Lift(Connection connection)
@@ -33,7 +33,7 @@ namespace CSharpSerialConnection
 
         public bool gaNaarVerdieping(int verdieping)
         {
-            throw NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace CSharpSerialConnection
         /// <returns>true</returns>
         public bool wijzigModus(LiftMode modus)
         {
-            throw NotImplementedException();
+            throw new NotImplementedException();
             this.modus = modus;
 
             return true;
