@@ -10,6 +10,7 @@
     #define MOTOR_RIGHT 2
 
     /* function prototypes */
-    void showStatus(uint8_t verdieping, uint8_t hoogte, uint8_t motor);
+    void showStatus(uint8_t verdieping, uint16_t hoogte, uint8_t motor);
+    void checkButtons(void);
 
 #endif

@@ -28,6 +28,21 @@ void welcome(void)
 }
 
 uint8_t temp;
+uint16_t tempLong;
+
+char * parseLongNumber(char *cp)
+{
+    char number[10];
+    uint8_t i;
+
+    for (uint8_t i = 0; (*(++cp) != '-') && (*cp != '\0'); i++) {
+        number[i] = *cp;
+    }
+
+    tempLong = atoi(number);
+
+    return cp;
+}
 
 char * parseNumber(char *cp)
 {
@@ -66,9 +81,9 @@ void parseCommand(char *command)
 
             // note that the height will probably be a 16-bit integer later
             // hoogte
-            command = parseNumber(command);
+            command = parseLongNumber(command);
 
-            uint8_t hoogte = temp;
+            uint16_t hoogte = tempLong;
 
             if (*command != '-') {
                 return;
@@ -91,15 +106,12 @@ int main(void)
     welcome();
 
     char * message;
-    uint8_t state = STATE_IDLE;
 
     while (true) {
-        switch (state) {
-            case STATE_IDLE:
-                message = receiveMessage();
-                parseCommand(message);
-                break;
-        }
+        message = receiveMessage();
+        parseCommand(message);
+
+        //checkButtons();
     }
     return 0;
 }
